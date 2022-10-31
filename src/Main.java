@@ -1,11 +1,19 @@
-import java.util.HashMap;
+import manager.*;
+import model.Epic;
+import model.StatusTask;
+import model.Subtask;
+import model.Task;
+
+import java.util.ArrayList;
 
 
 public class Main {
-
     public static void main(String[] args) {
 
-        TaskManger taskManger = new TaskManger();
+        TaskManager inMemoryTaskManager = Manager.getDefault();
+
+        HistoryManager historyManager = Manager.getDefaultHistory();
+
 
         ////////////ТЕСТИРОВАНИЕ ЗАДАЧ  ////////////////////
 
@@ -14,76 +22,76 @@ public class Main {
         System.out.println();
 
         System.out.println("ПОЛУЧЕНИЕ СПИСКА ВСЕХ ЗАДАЧ");
-        taskManger.clearTask();     // очищаем список задач
-        createListEpicTask(taskManger); // создаем новый список задач
-        System.out.println("Список всех задач =\n" + taskManger.getAllTask());
+        inMemoryTaskManager.clearTask();     // очищаем список задач
+        createListEpicTask(inMemoryTaskManager); // создаем новый список задач
+        System.out.println("Список всех задач =\n" + inMemoryTaskManager.getAllTask());
         System.out.println();
 
 
         System.out.println("УДАЛЕНИЕ ВСЕХ ЗАДАЧ");
-        taskManger.clearTask();     // очищаем список задач
-        createListEpicTask(taskManger); // создаем новый список задач
+        inMemoryTaskManager.clearTask();     // очищаем список задач
+        createListEpicTask(inMemoryTaskManager); // создаем новый список задач
         System.out.println("Количество всех задач до удаления = "
-                + taskManger.getAllTask().size());
-        taskManger.clearTask();
+                + inMemoryTaskManager.getAllTask().size());
+        inMemoryTaskManager.clearTask();
         System.out.println("Количество всех задач в после удаления = "
-                + taskManger.getAllTask().size());
+                + inMemoryTaskManager.getAllTask().size());
         System.out.println();
 
 
         System.out.println("ПОЛУЧЕНИЕ ЗАДАЧИ ПО Id");
-        taskManger.clearTask();
-        createListEpicTask(taskManger);
-        Integer idTask = getSomeId(taskManger);
+        inMemoryTaskManager.clearTask();
+        createListEpicTask(inMemoryTaskManager);
+        Integer idTask = getSomeIdTask(inMemoryTaskManager);
         System.out.println("Результат получения задачи по Id:");
-        System.out.println("Задача[" + idTask + "] = " + taskManger.getTaskById(idTask));
+        System.out.println("Задача[" + idTask + "] = " + inMemoryTaskManager.getTaskById(idTask));
         System.out.println();
 
 
         System.out.println("УДАЛЕНИЕ ЗАДАЧИ ПО Id");
-        taskManger.clearTask();     // очищаем список задач
-        createListEpicTask(taskManger); // создаем новый список задач
+        inMemoryTaskManager.clearTask();     // очищаем список задач
+        createListEpicTask(inMemoryTaskManager); // создаем новый список задач
         System.out.println("Количество всех задач до удаления по Id = "
-                + taskManger.getAllTask().size());
-        idTask = getSomeId(taskManger); // получаем случайный id из taskManger
-        taskManger.removeTaskById(idTask);
+                + inMemoryTaskManager.getAllTask().size());
+        idTask = getSomeIdTask(inMemoryTaskManager); // получаем случайный id из inMemoryTaskManager
+        inMemoryTaskManager.removeTaskById(idTask);
         System.out.println("Количество всех задач  после удаления по Id = "
-                + taskManger.getAllTask().size());
+                + inMemoryTaskManager.getAllTask().size());
         System.out.println();
 
         System.out.println("ОБНОВЛЕНИЕ ЗАДАЧИ ПО Id");
-        taskManger.clearEpic();     // очищаем список задач
-        createListEpicTask(taskManger); // создаем новый список задач
-        idTask = getSomeId(taskManger); // получаем некоторый Id задачи
-        Task task = taskManger.getTaskById(idTask); // достаем задачу из списка
+        inMemoryTaskManager.clearEpic();     // очищаем список задач
+        createListEpicTask(inMemoryTaskManager); // создаем новый список задач
+        idTask = getSomeIdTask(inMemoryTaskManager); // получаем некоторый Id задачи
+        Task task = inMemoryTaskManager.getTaskById(idTask); // достаем задачу из списка
         task.setTitle("@@@@@@@"); // обновляем поле Title
-        taskManger.updateTask(idTask, task); // возвращаем задачу в список
+        inMemoryTaskManager.updateTask(idTask, task); // возвращаем задачу в список
         System.out.println("Результат обновления поля Title задачи по Id новым значением @@@@@@@:");
-        System.out.println(taskManger.getTaskById(idTask));
+        System.out.println(inMemoryTaskManager.getTaskById(idTask));
         System.out.println();
 
 
         System.out.println("ПРОВЕРКА ИЗМЕНЕНИЯ СТАТУСА ЗАДАЧИ В IN_PROGRESS");
-        taskManger.clearEpic();     // очищаем список задач
-        createListEpicTask(taskManger); // создаем новый список задач
-        Integer id = getSomeId(taskManger); // получаем некоторый id из taskManger
+        inMemoryTaskManager.clearEpic();     // очищаем список задач
+        createListEpicTask(inMemoryTaskManager); // создаем новый список задач
+        Integer id = getSomeIdTask(inMemoryTaskManager); // получаем некоторый id из inMemoryTaskManager
         System.out.println("Статус задачи до его изменения = "
-                + taskManger.getTaskById(id).getStatus());
-        taskManger.getTaskById(id).startTask();
+                + inMemoryTaskManager.getTaskById(id).getStatus());
+        inMemoryTaskManager.getTaskById(id).startTask();
         System.out.println("Статус задачи после его изменения = "
-                + taskManger.getTaskById(id).getStatus());
+                + inMemoryTaskManager.getTaskById(id).getStatus());
         System.out.println();
 
 
         System.out.println("ПРОВЕРКА ИЗМЕНЕНИЯ СТАТУСА ЗАДАЧИ В DONE");
-        taskManger.clearTask();     // очищаем список задач
-        createListEpicTask(taskManger); // создаем новый список задач
-        id = getSomeId(taskManger); // получаем некоторый id из taskManger
+        inMemoryTaskManager.clearTask();     // очищаем список задач
+        createListEpicTask(inMemoryTaskManager); // создаем новый список задач
+        id = getSomeIdTask(inMemoryTaskManager); // получаем некоторый id из inMemoryTaskManager
         System.out.println("Статус задачи до его изменения = "
-                + taskManger.getTaskById(id).getStatus());
-        taskManger.getTaskById(id).finishTask();
+                + inMemoryTaskManager.getTaskById(id).getStatus());
+        inMemoryTaskManager.getTaskById(id).finishTask();
         System.out.println("Статус задачи после его изменения = "
-                + taskManger.getTaskById(id).getStatus());
+                + inMemoryTaskManager.getTaskById(id).getStatus());
         System.out.println();
 
 
@@ -95,98 +103,98 @@ public class Main {
 
 
         System.out.println("ПОЛУЧЕНИЕ СПИСКА ВСЕХ ПОДЗАДАЧ ЭПИКА");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        System.out.println(taskManger.getAllEpic());
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        System.out.println(inMemoryTaskManager.getAllEpic());
         System.out.println();
 
 
         System.out.println("УДАЛЕНИЕ ВСЕХ ЭПИКОВ");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
         System.out.println("Количество всех эпиков до удаления = "
-                + taskManger.getAllEpic().size());
-        taskManger.clearEpic();
+                + inMemoryTaskManager.getAllEpic().size());
+        inMemoryTaskManager.clearEpic();
         System.out.println("Количество всех эпиков после удаления = "
-                + taskManger.getAllEpic().size());
+                + inMemoryTaskManager.getAllEpic().size());
         System.out.println();
 
 
         System.out.println("УДАЛЕНИЕ ЭПИКА ПО Id");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        id = getSomeIdEpic(taskManger);
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        id = getSomeIdEpic(inMemoryTaskManager);
         System.out.println("Количество всех эпиков до удаления по Id = "
-                + taskManger.getAllEpic().size());
-        taskManger.removeEpicById(id);
+                + inMemoryTaskManager.getAllEpic().size());
+        inMemoryTaskManager.removeEpicById(id);
         System.out.println("Количество всех эпиков после удаления по Id = "
-                + taskManger.getAllEpic().size());
+                + inMemoryTaskManager.getAllEpic().size());
         System.out.println();
 
 
         System.out.println("ОБНОВЛЕНИЕ ЭПИКА ПО Id");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        Integer idEpic = getSomeIdEpic(taskManger);
-        Epic epic = taskManger.getEpicById(idEpic);
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        Integer idEpic = getSomeIdEpic(inMemoryTaskManager);
+        Epic epic = inMemoryTaskManager.getEpicById(idEpic);
         epic.setTitle("@@@@@@@"); // обновляем поле Title
-        taskManger.updateEpic(idEpic, epic); // возвращаем задачу в список
+        inMemoryTaskManager.updateEpic(idEpic, epic); // возвращаем задачу в список
         System.out.println("Результат обновления поля Title эпика по Id новым значением @@@@@@@:");
-        System.out.println(taskManger.getEpicById(idEpic));
+        System.out.println(inMemoryTaskManager.getEpicById(idEpic));
         System.out.println();
 
 
         System.out.println("ПРОВЕРКА ИЗМЕНЕНИЯ СТАТУСА ЭПИКА");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        id = getSomeIdEpic(taskManger); // получаем некоторый id из taskManger
-        epic = taskManger.getEpicById(id); // выбрали эпик из списка
-        HashMap<Integer, Task> listSubtask = epic.getAllSubtask();// выбрали списк подзадач
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager); // получаем некоторый id из inMemoryTaskManager
         System.out.println("Статус всех подзадач эпика устанавливаем в DONE");
-        for (Integer iter : listSubtask.keySet()) {
-            task = listSubtask.get(iter);
-            task.setStatus(StatusTask.DONE);
-            listSubtask.put(iter, task);
+        for (Subtask subtask : inMemoryTaskManager.getAllSubtaskEpic(idEpic)) {
+            subtask.setStatus(StatusTask.DONE);
+            inMemoryTaskManager.updateSubtaskById(subtask.getUid(), subtask);
         }
-        epic.setListSubtask(listSubtask);
-        System.out.println("Статус эпика становится:  " + epic.getStatusTask());
+        inMemoryTaskManager.checkStatus(idEpic);
+        System.out.println("Статус эпика становится:  " + inMemoryTaskManager.getEpicById(idEpic));
 
         System.out.println("Статус всех подзадач эпика устанавливаем в NEW");
-        for (Integer iter : listSubtask.keySet()) {
-            task = listSubtask.get(iter);
-            task.setStatus(StatusTask.NEW);
-            listSubtask.put(iter, task);
+        for (Subtask subtask : inMemoryTaskManager.getAllSubtaskEpic(idEpic)) {
+            subtask.setStatus(StatusTask.NEW);
+            inMemoryTaskManager.updateSubtaskById(subtask.getUid(), subtask);
         }
-        epic.setListSubtask(listSubtask);
-        System.out.println("Статус эпика становится:  " + epic.getStatusTask());
+        inMemoryTaskManager.checkStatus(idEpic);
+        System.out.println("Статус эпика становится:  " + inMemoryTaskManager.getEpicById(idEpic));
 
         System.out.println("Статус всех подзадач эпика устанавливаем в DONE кроме последней с NEW");
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager); // получаем некоторый id из inMemoryTaskManager
         Integer idEndSubtask = 0;
-        for (Integer iter : listSubtask.keySet()) {
-            task = listSubtask.get(iter);
-            task.setStatus(StatusTask.DONE);
-            listSubtask.put(iter, task);
-            idEndSubtask = iter;
+        for (Subtask subtask : inMemoryTaskManager.getAllSubtaskEpic(idEpic)) {
+            subtask.setStatus(StatusTask.DONE);
+            inMemoryTaskManager.updateSubtaskById(subtask.getUid(), subtask);
+            idEndSubtask = subtask.getUid();
         }
-        task = listSubtask.get(idEndSubtask);
-        task.setStatus(StatusTask.NEW);  // у последней подзадачи статус NEW
-        listSubtask.put(idEndSubtask, task);
-        epic.setListSubtask(listSubtask);
-        System.out.println("Статус эпика становится:  " + epic.getStatusTask());
+        Subtask subtask = inMemoryTaskManager.getSubtaskById(idEndSubtask);
+        subtask.setStatus(StatusTask.NEW);  // у последней подзадачи статус NEW
+        inMemoryTaskManager.updateSubtaskById(subtask.getUid(), subtask);
+        inMemoryTaskManager.checkStatus(idEpic);
+        System.out.println("Статус эпика становится:  " + inMemoryTaskManager.getEpicById(idEpic));
 
         System.out.println("Статус всех подзадач эпика устанавливаем в DONE кроме последней с IN_PROGRES");
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager); // получаем некоторый id из inMemoryTaskManager
         idEndSubtask = 0;
-        for (Integer iter : listSubtask.keySet()) {
-            task = listSubtask.get(iter);
-            task.setStatus(StatusTask.DONE);
-            listSubtask.put(iter, task);
-            idEndSubtask = iter;
+        for (Subtask subtask1 : inMemoryTaskManager.getAllSubtaskEpic(idEpic)) {
+            subtask1.setStatus(StatusTask.DONE);
+            inMemoryTaskManager.updateSubtaskById(subtask.getUid(), subtask1);
+            idEndSubtask = subtask1.getUid();
         }
-        task = listSubtask.get(idEndSubtask);
-        task.setStatus(StatusTask.IN_PROGRESS);  // у последней подзадачи статус IN_PROGRESS
-        listSubtask.put(idEndSubtask, task);
-        epic.setListSubtask(listSubtask);
-        System.out.println("Статус эпика становится:  " + epic.getStatusTask());
+        subtask = inMemoryTaskManager.getSubtaskById(idEndSubtask);
+        subtask.setStatus(StatusTask.IN_PROGRESS);  // у последней подзадачи статус IN_PROGRESS
+        inMemoryTaskManager.updateSubtaskById(subtask.getUid(), subtask);
+        inMemoryTaskManager.checkStatus(idEpic);
+        System.out.println("Статус эпика становится:  " + inMemoryTaskManager.getEpicById(idEpic));
         System.out.println();
 
 
@@ -197,114 +205,114 @@ public class Main {
 
 
         System.out.println("ПОЛУЧЕНИЕ СПИСКА ВСЕХ ПОДЗАДАЧ ЭПИКА");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        idEpic = getSomeIdEpic(taskManger);// получаем некоторый id эпика из taskManger
-        epic = (taskManger.getEpicById(idEpic)); // получаем эпик
-        listSubtask = epic.getAllSubtask(); // список подзадач
-        System.out.println("Список подзадач эпика:\n" + "Epic[" + idEpic
-                + "]=" + listSubtask);
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager);// получаем некоторый id эпика из inMemoryTaskManager
+        ArrayList<Subtask> subt = inMemoryTaskManager.getAllSubtaskEpic(idEpic);
+        System.out.println("Список подзадач эпика:\n" + "model.Epic[" + idEpic
+                + "]=" + subt);
         System.out.println();
 
         System.out.println("УДАЛЕНИЕ ВСЕХ ПОДЗАДАЧ ЭПИКА");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        idEpic = getSomeIdEpic(taskManger);// получаем некоторый id эпика из taskManger
-        epic = taskManger.getEpicById(idEpic);
-        System.out.println("Список подзадач эпика до удаления:\n" + listSubtask);
-        epic.clearSubtask();
-        listSubtask = epic.getAllSubtask();
-        System.out.println("Список подзадач эпика после удаления:\n" + listSubtask);
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager);// получаем некоторый id эпика из inMemoryTaskManager
+        System.out.println("Список подзадач эпика до удаления:\n" + inMemoryTaskManager.getAllSubtaskEpic(idEpic));
+        inMemoryTaskManager.clearSubtaskEpic(idEpic);
+        System.out.println("Список подзадач эпика после удаления:\n" + inMemoryTaskManager.getAllSubtaskEpic(idEpic));
         System.out.println();
 
         System.out.println("ПОЛУЧЕНИЕ ПОДЗАДАЧИ ЭПИКА ПО Id");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        idEpic = getSomeIdEpic(taskManger);// получаем некоторый id эпика из taskManger
-        epic = taskManger.getEpicById(idEpic);
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager);// получаем некоторый id эпика из inMemoryTaskManager
         Integer idSubtask;
-        for (Integer iter : epic.getAllSubtask().keySet()) {
-            idSubtask = iter;
-            task = epic.getSubtaskById(idSubtask);
+        for (Subtask iter : inMemoryTaskManager.getAllSubtaskEpic(idEpic)) {
+            idSubtask = iter.getUid();
+            subtask = inMemoryTaskManager.getSubtaskById(idSubtask);
             System.out.println("Подзадача эпика с Id"
-                    + " эпика " + idEpic + " и Id подзадачи " + idSubtask + "\n" + task);
-            System.out.println();
+                    + " эпика " + idEpic + " и Id подзадачи " + idSubtask + "\n" + subtask);
             break; // выбираем первый Id подзадачи
         }
+        System.out.println();
 
         System.out.println("ОБНОВЛЕНИЕ ПОЛЯ ПОДЗАДАЧИ ЭПИКА");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        idEpic = getSomeIdEpic(taskManger);// получаем некоторый id эпика из taskManger
-        epic = taskManger.getEpicById(idEpic);// достали эпик из taskManger
-        listSubtask = epic.getAllSubtask(); // достали список задач из эпик
-        for (int idSubTsk : listSubtask.keySet()) {
-            task = epic.getSubtaskById(idSubTsk); // достали задачу из списка задач
-            task.setTitle("@@@@@@@@@@"); // изменили наименование подзадачи
-            epic.updateSubtask(idSubTsk, task); // обновили список задач эпик
-            taskManger.updateEpic(idEpic, epic); // обновили спиок taskManger
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager);// получаем некоторый id эпика из inMemoryTaskManager
+        idSubtask = 0;
+        for (Subtask iter : inMemoryTaskManager.getAllSubtaskEpic(idEpic)) {
+            subtask = iter; // достали задачу из списка задач
+            idSubtask = subtask.getUid();
+            subtask.setTitle("@@@@@@@@@@"); // изменили наименование подзадачи
+            inMemoryTaskManager.updateSubtaskById(idSubtask, subtask); // обновили список задач эпик
             break; // выбираем первый Id подзадачи
         }
-        System.out.println("Обновление поля Title подзадачи эпика c Id " + idEpic
-                + " значением @@@@@@@@@@:\n" + taskManger.getEpicById(idEpic).toString() + " \n ");
+        System.out.println("Обновление поля Title подзадачи c Id " + idSubtask + " и idEpic "
+                + idEpic + " значением @@@@@@@@@@:\n" + inMemoryTaskManager.getSubtaskById(idSubtask).toString() + " \n ");
 
 
         System.out.println("УДАЛЕНИЕ ПОДЗАДАЧИ ИЗ СПИСКА ПОДЗАДАЧ ЭПИКА");
-        taskManger.clearEpic();     // очищаем список эпиков
-        createListEpicTask(taskManger); // создаем новый список эпиков
-        idEpic = getSomeIdEpic(taskManger);// получаем случайный id эпика из taskManger
-        epic = (taskManger.getEpicById(idEpic));// достали эпик из taskManger
-        listSubtask = epic.getAllSubtask(); // достали список задач из эпик
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
+        idEpic = getSomeIdEpic(inMemoryTaskManager);// получаем случайный id эпика из inMemoryTaskManager
         System.out.println("Длина списка подзадач до удаления подзадачи: "
-                + epic.getAllSubtask().size());
-        for (Integer idSubTsk : listSubtask.keySet()) {
-            epic.removeSubtaskById(idSubTsk); // удалили из списка подзадачу
-            taskManger.updateEpic(idEpic, epic); // положили обратно в taskManger
+                + inMemoryTaskManager.getAllSubtaskEpic(idEpic).size());
+        for (Subtask iter : inMemoryTaskManager.getAllSubtaskEpic(idEpic)) {
+            idSubtask = iter.getUid();
+            inMemoryTaskManager.removeSubtaskById(idSubtask); // удалили из списка подзадачу
             break; // взяли для обработки только первый элемент списка
         }
         System.out.println("Длина списка подзадач после удаления подзадачи: "
-                + (taskManger.getEpicById(idEpic)).getAllSubtask().size());
+                + (inMemoryTaskManager.getAllSubtaskEpic(idEpic).size()));
+        System.out.println();
 
-    }
 
-
-    public static HashMap<Integer, Task> createSubTask(int range) {
-        HashMap<Integer, Task> listSubtask = new HashMap<>();
-        for (int i = 0; i < range; i++) {
-            Task subtask = new Task("nameSubTask" + i, "descriptionSubTask" + i);
-            listSubtask.put(subtask.getUid(), subtask);
+        System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРА ЗАДАЧ");
+        for (Task iter : historyManager.getHistory()){
+            System.out.println("Uid = " + iter.getUid() + "  Title = " + iter.getTitle());
         }
-        return listSubtask;
+
     }
 
-    public static void createListEpicTask(TaskManger taskManger) {
+
+    public static void createSubtasks(TaskManager inMemoryTaskManager, Integer idEpic, int range) {
+        Subtask subtask;
+        for (int i = 0; i < range; i++) {
+            subtask = new Subtask("nameSubtask" + i, "descriptionSubtask" + i);
+            subtask.setIdEpic(idEpic);
+            inMemoryTaskManager.addSubtask(subtask.getUid(), subtask);
+        }
+        inMemoryTaskManager.checkStatus(idEpic);
+    }
+
+    public static void createListEpicTask(TaskManager inMemoryTaskManager) {
         for (int i = 0; i < 5; i++) {
             Task task = new Task("nameTask" + i, "descriptionTask" + i);
-            taskManger.addTask(task.getUid(), task);
+            inMemoryTaskManager.addTask(task.getUid(), task);
 
             Epic epic = new Epic("nameEpic" + i, "descriptionEpic" + i);
-            epic.setListSubtask(createSubTask(3));
-            taskManger.addEpic(epic.getUid(), epic);
+            inMemoryTaskManager.addEpic(epic.getUid(), epic);
+            createSubtasks(inMemoryTaskManager, epic.getUid(), 3);
         }
     }
 
-    public static Integer getSomeId(TaskManger taskManger) {
-        Integer id = 0;
-        for (Integer iter : taskManger.getAllTask().keySet()) {
-            id = iter;
+    public static Integer getSomeIdTask(TaskManager inMemoryTaskManager) {
+        Integer idTask = 0;
+        for (Integer iter : inMemoryTaskManager.getAllTask().keySet()) {
+            idTask = iter;
             break; // выбираем первый Id  задачи
         }
-        return id;
+        return idTask;
     }
 
-    public static Integer getSomeIdEpic(TaskManger taskManger) {
-        Integer id = 0;
-        for (Integer iter : taskManger.getAllEpic().keySet()) {
-            id = iter;
+    public static Integer getSomeIdEpic(TaskManager inMemoryTaskManager) {
+        Integer idEpic = 0;
+        for (Integer iter : inMemoryTaskManager.getAllEpic().keySet()) {
+            idEpic = iter;
             break; // выбираем первый Id эпика
         }
-        return id;
+        return idEpic;
     }
-
 
 }

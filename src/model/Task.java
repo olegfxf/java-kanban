@@ -1,4 +1,6 @@
+package model;
 
+import manager.Manager;
 
 public class Task {
     protected Integer uid;
@@ -6,14 +8,20 @@ public class Task {
     protected String description;
     protected StatusTask statusTask;
 
-    public Task(String title, String description) {
+    public Task() {
+    }
 
+    public Task(String title, String description) {
         this.uid = Uid.getUid();
         this.title = title;
         this.description = description;
         this.statusTask = StatusTask.NEW;
     }
 
+
+    public Integer getUid() {
+        return uid;
+    }
 
     public void startTask() {
         statusTask = StatusTask.IN_PROGRESS;
@@ -39,11 +47,6 @@ public class Task {
         this.description = description;
     }
 
-    public Integer getUid() {
-        return uid;
-    }
-
-
     public StatusTask getStatus() {
         return statusTask;
     }
@@ -54,7 +57,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "model.Task{" +
                 "uid=" + uid +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
