@@ -268,10 +268,30 @@ public class Main {
         System.out.println();
 
 
-        System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРА ЗАДАЧ");
+        System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРА ЗАДАЧ - Исходное состояние");
         for (Task iter : historyManager.getHistory()){
             System.out.println("Uid = " + iter.getUid() + "  Title = " + iter.getTitle());
         }
+
+
+
+            System.out.println();
+
+            idTask = getSomeIdTask(inMemoryTaskManager);
+            inMemoryTaskManager.getTaskById(idTask);
+
+
+
+
+            System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРА ЗАДАЧ - Сотояние после просмотра задачи с Id " + idTask);
+            for (Task iter : historyManager.getHistory()){
+                System.out.println("Uid = " + iter.getUid() + "  Title = " + iter.getTitle());
+            }
+
+
+
+
+
 
     }
 
