@@ -1,7 +1,5 @@
 package model;
 
-import manager.Manager;
-
 public class Task {
     protected Integer uid;
     protected String title;

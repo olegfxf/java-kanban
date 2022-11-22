@@ -4,7 +4,9 @@ import model.StatusTask;
 import model.Subtask;
 import model.Task;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Main {
@@ -99,6 +101,7 @@ public class Main {
         System.out.println("ТЕСТИРОВАНИЕ ЭПИКОВ");
         System.out.println();
 
+
         //////// ТЕСТИРОВАНИЕ  ЭПИКОВ ///////////////////
 
 
@@ -163,6 +166,7 @@ public class Main {
         }
         inMemoryTaskManager.checkStatus(idEpic);
         System.out.println("Статус эпика становится:  " + inMemoryTaskManager.getEpicById(idEpic));
+
 
         System.out.println("Статус всех подзадач эпика устанавливаем в DONE кроме последней с NEW");
         inMemoryTaskManager.clearEpic();     // очищаем список эпиков
@@ -268,29 +272,129 @@ public class Main {
         System.out.println();
 
 
-        System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРА ЗАДАЧ - Исходное состояние");
-        for (Task iter : historyManager.getHistory()){
-            System.out.println("Uid = " + iter.getUid() + "  Title = " + iter.getTitle());
-        }
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРОВ ПО тз №4");
+        System.out.println();
 
 
-
-            System.out.println();
-
-            idTask = getSomeIdTask(inMemoryTaskManager);
-            inMemoryTaskManager.getTaskById(idTask);
-
-
-
-
-            System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРА ЗАДАЧ - Сотояние после просмотра задачи с Id " + idTask);
-            for (Task iter : historyManager.getHistory()){
-                System.out.println("Uid = " + iter.getUid() + "  Title = " + iter.getTitle());
-            }
+        System.out.println();
+        System.out.println("getHistoriy = \n" + historyManager.getHistory().getTasks());
+        System.out.println();
+        System.out.println("История просмотров(idTask) в LinkedList");
+        historyManager.getHistory().getTasks().stream().forEach(e -> System.out.println(e.getUid()));
+        System.out.println();
+        System.out.println("История просмотров(idTask) в HashMap");
+        historyManager.getHashMapTask().keySet().stream().sorted().forEach(e -> System.out.println(e));
 
 
+        HashMap<Integer, String> test = new HashMap<>();
+        historyManager.getHistory().getTasks().stream().forEach(e -> test.put(e.getUid(), "")); // заполняем test
+        historyManager.getHashMapTask().keySet().stream().forEach(e -> test.remove(e));         // проверяем test
+        System.out.println();
+        System.out.println("test.size() = " + test.size()); // если test.size() = 0, повторений нет (у HashMap ключ уникальный)
+        System.out.println("Если test.size() = 0, повторений нет (у HashMap ключ уникальный)");
 
 
+        System.out.println();
+        System.out.println();
+        System.out.println("ТЕСТИРОВАНИЕ ИСТОРИИ ПРОСМОТРОВ ПО ТЗ №5");
+        System.out.println();
+
+        historyManager.clearAll();
+
+
+        inMemoryTaskManager.clearTask(); // очищаем список задач
+        // создаем новый список задач
+        System.out.println("Id задач, эпиков и подзадач используемых при тестировании:");
+        task = new Task("nameTask" + 1, "descriptionTask" + 1);
+        Integer idTask1 = task.getUid();
+        System.out.println("idTask1 = " + idTask1);
+        inMemoryTaskManager.addTask(idTask1, task);
+
+        task = new Task("nameTask" + 2, "descriptionTask" + 2);
+        Integer idTask2 = task.getUid();
+        System.out.println("idTask2 = " + idTask2);
+        inMemoryTaskManager.addTask(idTask2, task);
+
+        inMemoryTaskManager.clearEpic();     // очищаем список эпиков
+        // создаем новый список эпиков
+        epic = new Epic("nameEpic" + 1, "descriptionEpic" + 1);
+        Integer idEpic1 = epic.getUid();
+        System.out.println("idEpic1 = " + idEpic1);
+        inMemoryTaskManager.addEpic(idEpic1, epic);
+
+
+        epic = new Epic("nameEpic" + 2, "descriptionEpic" + 2);
+        Integer idEpic2 = epic.getUid();
+        System.out.println("idEpic2 = " + idEpic2);
+        inMemoryTaskManager.addEpic(idEpic2, epic);
+
+
+        // создаем новый список подзадач эпика 2
+        subtask = new Subtask("nameSubtask" + 1, "descriptionSubtask" + 1);
+        subtask.setIdEpic(idEpic2);
+        Integer idSubtask1 = subtask.getUid();
+        System.out.println("idSutask1 = " + idSubtask1);
+        inMemoryTaskManager.addSubtask(idSubtask1, subtask);
+
+        subtask = new Subtask("nameSubtask" + 2, "descriptionSubtask" + 2);
+        subtask.setIdEpic(idEpic2);
+        Integer idSubtask2 = subtask.getUid();
+        System.out.println("idSutask2 = " + idSubtask2);
+        inMemoryTaskManager.addSubtask(idSubtask2, subtask);
+
+        subtask = new Subtask("nameSubtask" + 3, "descriptionSubtask" + 3);
+        subtask.setIdEpic(idEpic2);
+        Integer idSubtask3 = subtask.getUid();
+        System.out.println("idSutask3 = " + idSubtask3);
+        inMemoryTaskManager.addSubtask(idSubtask3, subtask);
+
+
+        System.out.println();
+        // Чтение задач и эпиков
+        System.out.println("История изменения просмотренных задач и эпиков:");
+        inMemoryTaskManager.getTaskById(idTask1);
+        inMemoryTaskManager.getTaskById(idTask2);
+
+        inMemoryTaskManager.getTaskById(idTask2);
+        inMemoryTaskManager.getTaskById(idTask1);
+
+        inMemoryTaskManager.getEpicById(idEpic1);
+        inMemoryTaskManager.getEpicById(idEpic2);
+
+        inMemoryTaskManager.getEpicById(idEpic2);
+        inMemoryTaskManager.getEpicById(idEpic1);
+
+        // Удаление задачи с idTask1
+        historyManager.remove(idTask1, inMemoryTaskManager);
+        System.out.println();
+        System.out.println("Удаление задачи c idTask = " + idTask1);
+
+        System.out.println("История просмотров(idTask) в LinkedList");
+        historyManager.getHistory().getTasks().stream().forEach(e -> System.out.println(e.getUid()));
+        System.out.println("История просмотров(idTask) в HashMap");
+        historyManager.getHashMapTask().keySet().stream().sorted().forEach(e -> System.out.println(e));
+        System.out.println("Список задач из inMemoryTaskManager: ");
+        System.out.println(inMemoryTaskManager.getAllTask());
+
+        // Удаление эпика с id idEpic
+        System.out.println();
+        System.out.println("Удаление эпика c idEpic = " + idEpic2);
+        System.out.println("Выводим все подзадачи до удаления :");
+        System.out.println(inMemoryTaskManager.getAllSubtaskEpic(idEpic2));
+        historyManager.remove(idEpic2, inMemoryTaskManager);
+        System.out.println("Выводим все подзадачи после удаления :");
+        System.out.println(inMemoryTaskManager.getAllSubtaskEpic(idEpic2));
+
+
+        System.out.println("История просмотров(idEpic) в LinkedList");
+        historyManager.getHistory().getTasks().stream().forEach(e -> System.out.println(e.getUid()));
+        System.out.println("История просмотров(idEpic) в HashMap");
+        historyManager.getHashMapTask().keySet().stream().sorted().forEach(e -> System.out.println(e));
+        System.out.println("Список эпиков из inMemoryTaskManager: ");
+        System.out.println(inMemoryTaskManager.getAllEpic());
 
 
     }
@@ -307,7 +411,7 @@ public class Main {
     }
 
     public static void createListEpicTask(TaskManager inMemoryTaskManager) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             Task task = new Task("nameTask" + i, "descriptionTask" + i);
             inMemoryTaskManager.addTask(task.getUid(), task);
 
@@ -334,5 +438,6 @@ public class Main {
         }
         return idEpic;
     }
+
 
 }

@@ -50,7 +50,6 @@ public interface TaskManager {
 
     void clearSubtaskEpic(Integer idEpic);
 
-
     void checkStatus(Integer idEpic);
 
     InMemoryHistoryManager getInMemoryHistoryManager();
