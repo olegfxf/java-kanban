@@ -9,16 +9,14 @@ public class InMemoryHistoryManager implements HistoryManager {
     public static CustomLinkedList<Task> history = new CustomLinkedList<>();
 
     @Override
-    public CustomLinkedList<Task> getHistory() {
-        return history;
+    public List<Task> getHistory() {
+        return history.getListTasks();
     }
 
-    @Override
     public HashMap<Integer, Node<Task>> getHashMapTask() {
         return history.getHashHistory();
     }
 
-    @Override
     public void clearAll() {
         history.clear();
     }
@@ -30,10 +28,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
 
     @Override
-    public void remove(int id, TaskManager inMemoryTaskManager) {
-        inMemoryTaskManager.removeTaskById(id); // ключ уникален, поэтому либо task
-        inMemoryTaskManager.removeEpicById(id); // либо epic будет удален
-        inMemoryTaskManager.clearSubtaskEpic(id);
+    public void remove(int id) {
         history.removeNode(id);
     }
 
@@ -73,7 +68,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
             System.out.println("!!!!!!!!! Вставка !!!!!!!!!!!!!!!!!!! " + idTask);
             if (historyTasks.containsKey(idTask)) {
-                System.out.println("@@@@@@@@@ и Замена @@@@@@@@@@@@@@@@@@ " + idTask);
+                System.out.println("@@@@@@@@@ с Заменой @@@@@@@@@@@@@@@@@ " + idTask);
                 history.removeNode(idTask);
                 //historyTasks.remove(idTask); // сам себя перезаписывает
             }
@@ -172,7 +167,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             size = 0;
         }
 
-        public ArrayList<T> getTasks() {
+        public ArrayList<T> getListTasks() {
             Node<T> iter = head;
             ArrayList<T> listTask = new ArrayList<>();
             listTask.add(iter.data);

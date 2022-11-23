@@ -52,6 +52,4 @@ public interface TaskManager {
 
     void checkStatus(Integer idEpic);
 
-    InMemoryHistoryManager getInMemoryHistoryManager();
-
 }

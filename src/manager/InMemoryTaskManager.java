@@ -15,11 +15,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     InMemoryHistoryManager inMemoryHistoryManager = Manager.getDefaultHistory();
 
-    @Override
-    public InMemoryHistoryManager getInMemoryHistoryManager() {
-        return inMemoryHistoryManager;
-    }
-
     Task task = new Task("", "");
 
 
@@ -43,6 +38,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeTaskById(Integer id) {
+        inMemoryHistoryManager.remove(id);
         listTask.remove(id);
     }
 
@@ -77,6 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeEpicById(Integer idEpic) {
+        inMemoryHistoryManager.remove(idEpic);
         clearSubtaskEpic(idEpic);
         listEpic.remove(idEpic);
     }

@@ -2,17 +2,13 @@ package manager;
 
 import model.Task;
 
-import java.util.HashMap;
+import java.util.List;
 
 public interface HistoryManager {
     void add(Task task);
 
-    void remove(int id, TaskManager inMemoryTaskManager);
+    void remove(int id);
 
-    InMemoryHistoryManager.CustomLinkedList<Task> getHistory();
-
-    HashMap<Integer, Node<Task>> getHashMapTask();
-
-    void clearAll();
+    List<Task> getHistory();
 
 }
