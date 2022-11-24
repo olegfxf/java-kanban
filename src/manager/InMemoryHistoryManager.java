@@ -6,14 +6,14 @@ import java.util.*;
 
 
 public class InMemoryHistoryManager implements HistoryManager {
-    public static CustomLinkedList<Task> history = new CustomLinkedList<>();
+    private final static CustomLinkedList<Task> history = new CustomLinkedList<>();
 
     @Override
     public List<Task> getHistory() {
         return history.getListTasks();
     }
 
-    public HashMap<Integer, Node<Task>> getHashMapTask() {
+    public Map<Integer, Node<Task>> getHashMapTask() {
         return history.getHashHistory();
     }
 
@@ -21,11 +21,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         history.clear();
     }
 
-
     public void add(Task task) {
         history.linkLast(task);
     }
-
 
     @Override
     public void remove(int id) {
@@ -33,7 +31,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
 
-    public static class CustomLinkedList<T> {
+    private static class CustomLinkedList<T> {
         /**
          * Указатель на первый элемент списка. Он же first
          */
@@ -41,13 +39,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         /**
          * Указатель на последний элемент списка. Он же last
          */
-        public Node<T> tail;
-        private int size = 0;
+        private Node<T> tail;
+        int size = 0;
 
-        HashMap<Integer, Node<T>> historyTasks = new HashMap<>();
+        private final Map<Integer, Node<T>> historyTasks = new HashMap<>();
 
 
-        public void linkLast(T element) {
+        private void linkLast(T element) {
             Integer idTask = ((Task) element).getUid();
 
             System.out.println("History HashMap    (idTask)");
@@ -70,7 +68,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (historyTasks.containsKey(idTask)) {
                 System.out.println("@@@@@@@@@ с Заменой @@@@@@@@@@@@@@@@@ " + idTask);
                 history.removeNode(idTask);
-                //historyTasks.remove(idTask); // сам себя перезаписывает
             }
 
             // Реализуйте метод
@@ -87,15 +84,19 @@ public class InMemoryHistoryManager implements HistoryManager {
             size++;
         }
 
-        public T removeNode(Integer idTask) {
+        private T removeNode(Integer idTask) {
             Node<T> node = historyTasks.get(idTask);
             historyTasks.remove(idTask);
-            if (node.equals(tail))
-                return unlinkLast(node);
-            else if (node.equals(head))
-                return unlinkFirst(node);
-            else
-                return unlink(node);
+            if (node != null) {
+                if (node.equals(tail))
+                    return unlinkLast(node);
+                else if (node.equals(head))
+                    return unlinkFirst(node);
+                else
+                    return unlink(node);
+            } else {
+                return null;
+            }
         }
 
         private T unlinkFirst(Node<T> f) {
@@ -114,7 +115,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
 
-        public T unlink(Node<T> x) {
+        private T unlink(Node<T> x) {
             final T element = x.data;
             final Node<T> next = x.next;
             final Node<T> prev = x.prev;
@@ -154,7 +155,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             return element;
         }
 
-        public void clear() {
+        private void clear() {
             historyTasks.clear(); //очищаем HashMap
             for (Node<T> x = head; x != null; ) {
                 Node<T> next = x.next;
@@ -167,9 +168,9 @@ public class InMemoryHistoryManager implements HistoryManager {
             size = 0;
         }
 
-        public ArrayList<T> getListTasks() {
+        private List<T> getListTasks() {
             Node<T> iter = head;
-            ArrayList<T> listTask = new ArrayList<>();
+            List<T> listTask = new ArrayList<>();
             listTask.add(iter.data);
 
             while (iter.next != null) {
@@ -179,7 +180,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             return listTask;
         }
 
-        public HashMap<Integer, Node<T>> getHashHistory() {
+        private Map<Integer, Node<T>> getHashHistory() {
             return historyTasks;
         }
 

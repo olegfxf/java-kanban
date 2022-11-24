@@ -7,15 +7,17 @@ import model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    HashMap<Integer, Task> listTask = new HashMap<>();
-    HashMap<Integer, Epic> listEpic = new HashMap<>();
-    HashMap<Integer, Subtask> listSubtask = new HashMap<>();
+    private final Map<Integer, Task> listTask = new HashMap<>();
+    private final Map<Integer, Epic> listEpic = new HashMap<>();
+    private final Map<Integer, Subtask> listSubtask = new HashMap<>();
 
-    InMemoryHistoryManager inMemoryHistoryManager = Manager.getDefaultHistory();
+    protected InMemoryHistoryManager inMemoryHistoryManager = Manager.getDefaultHistory();
 
-    Task task = new Task("", "");
+    Task task = new Task();
 
 
     ////////////Task/////////////////////////////
@@ -43,12 +45,18 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Task> getAllTask() {
+    public Map<Integer, Task> getAllTask() {
         return listTask;
     }
 
     @Override
     public void clearTask() {
+        for (Integer iter : listTask.keySet()) {
+            Integer id = listTask.get(iter).getUid();
+            if (inMemoryHistoryManager.getHashMapTask().size() != 0) { // история просмотра задач не пуста
+                inMemoryHistoryManager.remove(id);
+            }
+        }
         listTask.clear();
     }
 
@@ -80,12 +88,18 @@ public class InMemoryTaskManager implements TaskManager {
 
     // получить спиок всех подзадач эпика
     @Override
-    public HashMap<Integer, Epic> getAllEpic() {
+    public Map<Integer, Epic> getAllEpic() {
         return listEpic;
     }
 
     @Override
     public void clearEpic() {
+        for (Integer iter : listEpic.keySet()) {
+            Integer id = listEpic.get(iter).getUid();
+            if (inMemoryHistoryManager.getHashMapTask().size() != 0) { // история просмотра задач не пуста
+                inMemoryHistoryManager.remove(id);
+            }
+        }
         listEpic.clear();
     }
 
@@ -109,12 +123,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeSubtaskById(Integer id) {
+        if (inMemoryHistoryManager.getHashMapTask().size() != 0) { // история просмотра задач не пуста
+            inMemoryHistoryManager.remove(id);
+        }
         listSubtask.remove(id);
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtaskEpic(Integer idEpic) {
-        ArrayList<Subtask> listSubt = new ArrayList<>();
+    public List<Subtask> getAllSubtaskEpic(Integer idEpic) {
+        List<Subtask> listSubt = new ArrayList<>();
         for (Integer iter : listSubtask.keySet()) {
             if (listSubtask.get(iter).getIdEpic().equals(idEpic)) {
                 listSubt.add(listSubtask.get(iter));
@@ -125,9 +142,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearSubtaskEpic(Integer idEpic) {
-        ArrayList<Subtask> listSubt = getAllSubtaskEpic(idEpic);
+        List<Subtask> listSubt = getAllSubtaskEpic(idEpic);
         for (Subtask iter : listSubt) {
-            removeSubtaskById(iter.getUid());
+            removeSubtaskById(iter.getUid()); // метод removeSubtaskById удаляет историю просмотра задач
         }
     }
 
@@ -136,7 +153,7 @@ public class InMemoryTaskManager implements TaskManager {
         int statusNEW = 0;
         int statusIN_PROGRESS = 0;
         int statusDONE = 0;
-        ArrayList<Subtask> subtasks = this.getAllSubtaskEpic(idEpic);
+        List<Subtask> subtasks = this.getAllSubtaskEpic(idEpic);
 
         for (Subtask subtask : subtasks) {
             if (subtask.getStatus() == StatusTask.NEW) {

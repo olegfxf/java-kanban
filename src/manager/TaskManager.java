@@ -3,9 +3,8 @@ package manager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public interface TaskManager {
 
@@ -18,7 +17,7 @@ public interface TaskManager {
 
     void removeTaskById(Integer id);
 
-    HashMap<Integer, Task> getAllTask();
+    Map<Integer, Task> getAllTask();
 
     void clearTask();
 
@@ -32,7 +31,7 @@ public interface TaskManager {
     void removeEpicById(Integer idEpic);
 
     // получить спиок всех подзадач эпика
-    HashMap<Integer, Epic> getAllEpic();
+    Map<Integer, Epic> getAllEpic();
 
     void clearEpic();
 
@@ -46,7 +45,7 @@ public interface TaskManager {
 
     void removeSubtaskById(Integer id);
 
-    ArrayList<Subtask> getAllSubtaskEpic(Integer idEpic);
+    List<Subtask> getAllSubtaskEpic(Integer idEpic);
 
     void clearSubtaskEpic(Integer idEpic);
 

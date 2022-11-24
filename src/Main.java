@@ -5,9 +5,7 @@ import model.StatusTask;
 import model.Subtask;
 import model.Task;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 
 public class Main {
@@ -214,7 +212,7 @@ public class Main {
         inMemoryTaskManager.clearEpic();     // очищаем список эпиков
         createListEpicTask(inMemoryTaskManager); // создаем новый список эпиков
         idEpic = getSomeIdEpic(inMemoryTaskManager);// получаем некоторый id эпика из inMemoryTaskManager
-        ArrayList<Subtask> subt = inMemoryTaskManager.getAllSubtaskEpic(idEpic);
+        List<Subtask> subt = inMemoryTaskManager.getAllSubtaskEpic(idEpic);
         System.out.println("Список подзадач эпика:\n" + "model.Epic[" + idEpic
                 + "]=" + subt);
         System.out.println();
@@ -274,9 +272,6 @@ public class Main {
         System.out.println();
 
 
-
-
-
         System.out.println();
         System.out.println();
         System.out.println();
@@ -289,10 +284,7 @@ public class Main {
         System.out.println("5.Удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи.");
 
 
-
         System.out.println();
-
-
         historyManager.clearAll();
         inMemoryTaskManager.clearTask(); // очищаем список задач
         // создаем новый список задач
@@ -389,7 +381,14 @@ public class Main {
         System.out.println("Список эпиков из inMemoryTaskManager: ");
         System.out.println(inMemoryTaskManager.getAllEpic());
         System.out.println("Эпик с idEpic = " + idEpic2 + " удален корректно, при распечатке списка эпиков он не выводится.");
-        System.out.println("Все подзадачи эпика с idEpic = " + idEpic2  + " удалены полностью.");
+        System.out.println("Все подзадачи эпика с idEpic = " + idEpic2 + " удалены полностью.");
+
+        System.out.println();
+        System.out.println("Проверяем работу метода  inMemoryTaskManager.clearEpic(). Текущий список истории просмотров стал:");
+        inMemoryTaskManager.clearEpic();
+        historyManager.getHashMapTask().keySet().stream().sorted().forEach(e -> System.out.println(e));
+        System.out.println("Последний эпик с idEpic = 345 удален.");
+
 
     }
 
