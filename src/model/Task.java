@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Task {
     protected Integer uid;
     protected String title;
@@ -14,6 +16,14 @@ public class Task {
         this.title = title;
         this.description = description;
         this.statusTask = StatusTask.NEW;
+    }
+
+    // Конструктор для формирования задачи из данных файла
+    public Task(Integer uid, String title, String description, String status) {
+        this.uid = uid;
+        this.title = title;
+        this.description = description;
+        this.statusTask = StatusTask.valueOf(status);
     }
 
 
@@ -54,13 +64,21 @@ public class Task {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task = (Task) o;
+        return Objects.equals(uid, task.uid) && Objects.equals(title, task.title) && Objects.equals(description, task.description) && statusTask == task.statusTask;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid, title, description, statusTask);
+    }
+
+    @Override
     public String toString() {
-        return "model.Task{" +
-                "uid=" + uid +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", statusTask=" + statusTask +
-                '}';
+        return   uid +  ",TASK," + title + "," + statusTask.toString() + "," + description;
     }
 }
 

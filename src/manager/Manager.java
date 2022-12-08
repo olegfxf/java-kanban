@@ -1,8 +1,9 @@
 package manager;
 
 public class Manager {
+
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        return new FileBackedTasksManager();
     }
 
     public static InMemoryHistoryManager getDefaultHistory() {

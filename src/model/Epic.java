@@ -7,6 +7,15 @@ public class Epic extends Task {
         this.uid = Uid.getUid();
         this.statusTask = StatusTask.NEW;
     }
+
+    public Epic(Integer uid, String title, String description, String status) {
+        this.uid = uid;
+        this.title = title;
+        this.description = description;
+        this.statusTask = StatusTask.valueOf(status);
+    }
+
+
     public Integer getUid() {
         return uid;
     }
@@ -22,11 +31,6 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "model.Epic["
-                + "uid=" + uid + ", "
-                + "title=" + title + ", "
-                + "description=" + description + ", "
-                + "statusTask=" + statusTask + ']';
-
+        return   uid +  ",EPIC," + title + "," + statusTask.toString() + "," + description;
     }
 }

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Subtask extends Task {
     Integer idEpic;
 
@@ -7,6 +9,13 @@ public class Subtask extends Task {
         super(title, description);
         this.uid = Uid.getUid();
         this.statusTask = StatusTask.NEW;
+    }
+    public Subtask(Integer uid, String title, String description, String status, Integer idEpic) {
+        this.uid = uid;
+        this.title = title;
+        this.description = description;
+        this.statusTask = StatusTask.valueOf(status);
+        this.idEpic = idEpic;
     }
 
     public Integer getUid() {
@@ -25,16 +34,26 @@ public class Subtask extends Task {
         this.title = title;
     }
 
+    ///2,SUBTASK,nameSubtask0,NEW,descriptionSubtask0,idEpic
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Subtask)) return false;
+        Subtask subtask = (Subtask) o;
+        return Objects.equals(idEpic, subtask.idEpic);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idEpic);
+    }
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                ", idEpic=" + idEpic +
-                ", uid=" + uid +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", statusTask=" + statusTask +
-                '}';
+        return   uid +  ",SUBTASK," + title + ","+  statusTask.toString() + "," + description+"," + idEpic;
+
     }
 
 }

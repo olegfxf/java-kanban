@@ -47,26 +47,15 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         private void linkLast(T element) {
             Integer idTask = ((Task) element).getUid();
-
-            System.out.println("History HashMap    (idTask)");
-            System.out.println(historyTasks.keySet());
-
             Node<T> iter = head;
-            System.out.println("History LinkedList (idTask)");
+
             if (iter != null) {
                 while (iter.next != null) {
-                    System.out.print(" " + ((Task) iter.data).getUid() + " ");
                     iter = iter.next;
                 }
-                System.out.print(" " + ((Task) tail.data).getUid() + " "); //print tail
-            } else {
-                System.out.println("[]");
             }
-            System.out.println();
 
-            System.out.println("!!!!!!!!! Вставка !!!!!!!!!!!!!!!!!!! " + idTask);
             if (historyTasks.containsKey(idTask)) {
-                System.out.println("@@@@@@@@@ с Заменой @@@@@@@@@@@@@@@@@ " + idTask);
                 history.removeNode(idTask);
             }
 
@@ -185,7 +174,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
     }
-
 
 }
 

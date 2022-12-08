@@ -5,17 +5,18 @@ import model.StatusTask;
 import model.Subtask;
 import model.Task;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> listTask = new HashMap<>();
-    private final Map<Integer, Epic> listEpic = new HashMap<>();
-    private final Map<Integer, Subtask> listSubtask = new HashMap<>();
+    protected static final Map<Integer, Task> listTask = new HashMap<>(); // заменить на privat
+    protected static final Map<Integer, Epic> listEpic = new HashMap<>();
+    protected static final Map<Integer, Subtask> listSubtask = new HashMap<>();
+    protected static final InMemoryHistoryManager inMemoryHistoryManager = Manager.getDefaultHistory();
 
-    protected InMemoryHistoryManager inMemoryHistoryManager = Manager.getDefaultHistory();
 
     Task task = new Task();
 
@@ -100,6 +101,7 @@ public class InMemoryTaskManager implements TaskManager {
                 inMemoryHistoryManager.remove(id);
             }
         }
+        listSubtask.clear();
         listEpic.clear();
     }
 
@@ -113,6 +115,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(Integer id) {
         task = listSubtask.get(id);
+        inMemoryHistoryManager.add(task);
         return listSubtask.get(id);
     }
 
@@ -145,6 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
         List<Subtask> listSubt = getAllSubtaskEpic(idEpic);
         for (Subtask iter : listSubt) {
             removeSubtaskById(iter.getUid()); // метод removeSubtaskById удаляет историю просмотра задач
+            inMemoryHistoryManager.remove(iter.getUid());
         }
     }
 
