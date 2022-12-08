@@ -1,18 +1,22 @@
 package manager;
 
+import exception.ManagerSaveException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import model.TaskType;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 
-import static java.util.Map.*;
+import static manager.HistoryFromString.historyFromString;
+import static manager.HistoryToString.historyToString;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
+    private static List<Integer> history = new ArrayList<>();
 
     @Override
     public void addTask(Integer uid, Task task) {
@@ -69,22 +73,26 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
+    public static List<Integer> getHistory() {
+        return history;
+    }
 
     public static void fromString(String[] split) {
-        switch (split[1]) {
+        switch (TaskType.valueOf(split[1])) {
 
-            case "TASK":
+            case TASK:
                 listTask.put(Integer.valueOf(split[0]), new Task(Integer.valueOf(split[0]), split[2], split[4], split[3]));
                 break;
 
-            case "EPIC":
+            case EPIC:
                 listEpic.put(Integer.valueOf(split[0]), new Epic(Integer.valueOf(split[0]), split[2], split[4], split[3]));
                 break;
 
-            case "SUBTASK":
+            case SUBTASK:
                 listSubtask.put(Integer.valueOf(split[0]), new Subtask(Integer.valueOf(split[0]), split[2], split[4], split[3], Integer.valueOf(split[5])));
                 break;
         }
+
     }
 
 
@@ -94,48 +102,31 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             String titelFiles = "id,type,name,status,description,epic";
             fileWriter.write(titelFiles + "\n");
 
-            for (Map.Entry<Integer, Task> iter : listTask.entrySet()) {
-                String str1 = iter.getValue().toString();
-                fileWriter.write(str1 + "\n");
+            for (Map.Entry<Integer, Task> taskEntry : listTask.entrySet()) {
+                String taskData = taskEntry.getValue().toString();
+                fileWriter.write(taskData + "\n");
             }
 
-            for (Map.Entry<Integer, Epic> iter : listEpic.entrySet()) {
-                String str1 = iter.getValue().toString();
-                fileWriter.write(str1 + "\n");
+            for (Map.Entry<Integer, Epic> epicEntry : listEpic.entrySet()) {
+                String epicData = epicEntry.getValue().toString();
+                fileWriter.write(epicData + "\n");
             }
 
-            for (Map.Entry<Integer, Subtask> iter : listSubtask.entrySet()) {
-                String str1 = iter.getValue().toString();
-                fileWriter.write(str1 + "\n");
+            for (Map.Entry<Integer, Subtask> subtaskEntry : listSubtask.entrySet()) {
+                String subtaskData = subtaskEntry.getValue().toString();
+                fileWriter.write(subtaskData + "\n");
             }
 
             fileWriter.write("\n"); // печатаем пустую строку в файл согласно ТЗ 6
 
-            fileWriter.write(historyToString()); // сохраняем историю просмотров
+            fileWriter.write(historyToString(inMemoryHistoryManager)); // сохраняем историю просмотров
 
         } catch (IOException e) {
-            System.out.println("Ошибки загрузки данных в файла  " + e.getCause());
+            throw new ManagerSaveException("Ошибка сохранения данных задач, эпиков, подзадач и истории просмотров.");
         }
 
     }
 
-    public static class ManagerSaveException extends RuntimeException {
-        // Из ТЗ №6 : "... исходим из того, что наш менеджер работает в идеальных условиях.
-        // Над ним не совершаются недопустимые операции, и все его действия со средой
-        // (например, сохранение файла) завершаются успешно.
-    }
-
-    static String historyToString() {
-        String str1 = "";
-        try { // сохраняем историю просмотров задач в строку
-            for (Task iter3 : inMemoryHistoryManager.getHistory()) {
-                str1 += iter3.getUid() + ",";
-            }
-        } catch (NullPointerException e) {
-            e.getMessage();
-        }
-        return str1;
-    }
 
 
     public static void loadFromFile(File file) {
@@ -145,56 +136,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             br.readLine(); // читаем шапку файла
 
             while (!(readLine = br.readLine()).equals("")) {
-                String[] split = readLine.split(",");
-                fromString(split);
+                String[] taskData = readLine.split(",");
+                fromString(taskData);
             }
 
             readLine = br.readLine();
 
-           if(readLine != null) historyFromString(readLine);
+           if(readLine != null)  history = historyFromString(readLine);
 
         } catch (IOException e) {
-            System.out.println("Ошибка выгрузки данных из файла " + e.getMessage());
+            throw new ManagerSaveException("Ошибка выгрузки данных из файла.");
         }
-    }
-
-    static List<Integer> historyFromString(String value) {
-
-        String[] split = value.split(",");
-        List<Integer> listId = new ArrayList<>();
-        for (String s : split) {
-            listId.add(Integer.valueOf(s));
-        }
-
-        // inMemoryHistoryManager сохраняет историю просмотров c сохранением всех данных по
-        // просмотренным задачам. В файле сохранены только id задач. Восстанавливаем по id
-        // данные для  inMemoryHistoryManager.
-        for (Integer iter : listId) {
-
-            for (Entry iterTask : listTask.entrySet()) {
-                if (iter.equals(iterTask.getKey())) {
-                    inMemoryHistoryManager.add((Task) iterTask.getValue());
-                    break;
-                }
-            }
-
-            for (Entry iterEpic : listEpic.entrySet()) {
-                if (iter.equals(iterEpic.getKey())) {
-                    inMemoryHistoryManager.add((Task)iterEpic.getValue());
-                    break;
-                }
-            }
-
-
-            for (Entry iterSubtask : listSubtask.entrySet()) {
-                if (iter.equals(iterSubtask.getKey())) {
-                    inMemoryHistoryManager.add((Task) iterSubtask.getValue());
-                    break;
-                }
-            }
-
-        }
-        return listId;
     }
 
 

@@ -1,18 +1,16 @@
 import manager.*;
 import manager.InMemoryHistoryManager;
 import model.Epic;
-import model.StatusTask;
 import model.Subtask;
 import model.Task;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        // получаем FileBackedTasksManager() из Manager;
+    public static void main(String[] args) {
+
         TaskManager inMemoryTaskManager = Manager.getDefault();
 
         InMemoryHistoryManager historyManager = Manager.getDefaultHistory();
@@ -25,7 +23,7 @@ public class Main {
         System.out.println("2.Запросите некоторые из них, чтобы заполнилась история просмотра.");
         System.out.println("3.Создайте новый FileBackedTasksManager менеджер(создан в строке 16 кода этого класса).");
         System.out.println("4.Проверьте, что история просмотра восстановилась верно и все задачи, эпики, подзадачи,"
-                               + " которые были в старом, есть в новом менеджере.");
+                + " которые были в старом, есть в новом менеджере.");
 
 
         System.out.println();
@@ -96,9 +94,6 @@ public class Main {
         inMemoryTaskManager.getSubtaskById(idSubtask3);
         inMemoryTaskManager.getSubtaskById(idSubtask1);
 
- //       System.out.println();
-   //     System.out.println("История просмотров(idTask) в LinkedList");
-     //   historyManager.getHistory().stream().forEach(e -> System.out.println(e.getUid()));
 
         System.out.println("\n1 ###########################");
         System.out.println("Список задач из inMemoryTaskManager: ");
@@ -115,7 +110,7 @@ public class Main {
 
 
         // сохраняем все данные из объектов классов FileBackedTasksManager и InMemoryHistoryManager
-        FileBackedTasksManager.save ();
+        FileBackedTasksManager.save();
 
 
         System.out.println("\n2 ###########################");
@@ -152,12 +147,14 @@ public class Main {
         System.out.println(inMemoryTaskManager.getAllSubtaskEpic(idEpic2));
 
         System.out.println("Восстановленная история просмотров(idTask) в LinkedList");
-        historyManager.getHistory().stream().forEach(e -> System.out.println(e.getUid()));
+        //historyManager.getHistory().stream().forEach(e -> System.out.println(e.getUid()));
+        System.out.println(FileBackedTasksManager.getHistory());
 
         System.out.println();
         System.out.println("4.Проверьте, что история просмотра восстановилась верно и все задачи, эпики, подзадачи,"
                 + " которые были в старом, есть в новом менеджере.");
         System.out.println("Все задачи, эпики, подзадачи и история просмотра задач восстановлены корректно.");
+
 
     }
 
