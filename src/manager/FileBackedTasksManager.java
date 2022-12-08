@@ -89,7 +89,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
 
     public static void save() throws ManagerSaveException {
-        try (Writer fileWriter = new FileWriter("./resources/filewriter.txt")) {
+        try (Writer fileWriter = new FileWriter("filewriter.csv")) {
 
             String titelFiles = "id,type,name,status,description,epic";
             fileWriter.write(titelFiles + "\n");

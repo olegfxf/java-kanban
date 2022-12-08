@@ -138,7 +138,7 @@ public class Main {
         System.out.println("Восстанавливаем все задачи, эпики, подзадачи и историю просмотра задач.");
 
         // восстанавливаем  данные объектов классов FileBackedTasksManager и InMemoryHistoryManager
-        FileBackedTasksManager.loadFromFile(new File("./resources/filewriter.txt"));
+        FileBackedTasksManager.loadFromFile(new File("filewriter.csv"));
         System.out.println("Загружаем задачи, эпики, подзадачи из файла.");
         System.out.println();
 
