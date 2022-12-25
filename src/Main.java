@@ -5,7 +5,8 @@ import model.Subtask;
 import model.Task;
 
 import java.io.File;
-import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 public class Main {
@@ -33,11 +34,15 @@ public class Main {
         System.out.println("1.Заведите несколько разных задач, эпиков и подзадач.");
         System.out.println("Id задач, эпиков и подзадач используемых при тестировании:");
         Task task = new Task("nameTask" + 1, "descriptionTask" + 1);
+        task.setStartTimeDuration(LocalDateTime.of(1999,2, 1,1,
+                        1), Duration.ofDays(60));
         Integer idTask1 = task.getUid();
         System.out.println("idTask1 = " + idTask1);
         inMemoryTaskManager.addTask(idTask1, task);
 
         task = new Task("nameTask" + 2, "descriptionTask" + 2);
+        task.setStartTimeDuration(LocalDateTime.of(1999,1, 1,1,
+                1), Duration.ofDays(6));
         Integer idTask2 = task.getUid();
         System.out.println("idTask2 = " + idTask2);
         inMemoryTaskManager.addTask(idTask2, task);
@@ -58,18 +63,24 @@ public class Main {
 
         // создаем новый список подзадач эпика 2
         Subtask subtask = new Subtask("nameSubtask" + 1, "descriptionSubtask" + 1);
+        subtask.setStartTimeDuration(LocalDateTime.of(1999,3, 1,1,
+                1), Duration.ofDays(6));
         subtask.setIdEpic(idEpic2);
         Integer idSubtask1 = subtask.getUid();
         System.out.println("idSutask1 = " + idSubtask1);
         inMemoryTaskManager.addSubtask(idSubtask1, subtask);
 
         subtask = new Subtask("nameSubtask" + 2, "descriptionSubtask" + 2);
+        subtask.setStartTimeDuration(LocalDateTime.of(1999,4, 1,1,
+                1), Duration.ofDays(6));
         subtask.setIdEpic(idEpic2);
         Integer idSubtask2 = subtask.getUid();
         System.out.println("idSutask2 = " + idSubtask2);
         inMemoryTaskManager.addSubtask(idSubtask2, subtask);
 
         subtask = new Subtask("nameSubtask" + 3, "descriptionSubtask" + 3);
+        subtask.setStartTimeDuration(LocalDateTime.of(1999,5, 1,1,
+                1), Duration.ofDays(6));
         subtask.setIdEpic(idEpic2);
         Integer idSubtask3 = subtask.getUid();
         System.out.println("idSutask3 = " + idSubtask3);
@@ -80,9 +91,18 @@ public class Main {
         System.out.println("2.Запросите некоторые из них, чтобы заполнилась история просмотра.");
 
         inMemoryTaskManager.getTaskById(idTask1);
-        inMemoryTaskManager.getTaskById(idTask2);
+        try {
+            inMemoryTaskManager.getTaskById(idTask2);
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
 
-        inMemoryTaskManager.getTaskById(idTask2);
+        try {
+            inMemoryTaskManager.getTaskById(idTask2);
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
+
         inMemoryTaskManager.getTaskById(idTask1);
 
         inMemoryTaskManager.getEpicById(idEpic1);
@@ -90,8 +110,11 @@ public class Main {
 
         inMemoryTaskManager.getEpicById(idEpic2);
         inMemoryTaskManager.getEpicById(idEpic1);
-
-        inMemoryTaskManager.getSubtaskById(idSubtask3);
+try {
+    inMemoryTaskManager.getSubtaskById(idSubtask3);
+} catch(IllegalArgumentException e){
+    System.out.println(e.getMessage());
+}
         inMemoryTaskManager.getSubtaskById(idSubtask1);
 
 
@@ -110,7 +133,7 @@ public class Main {
 
 
         // сохраняем все данные из объектов классов FileBackedTasksManager и InMemoryHistoryManager
-        FileBackedTasksManager.save();
+        FileBackedTasksManager.saveToFile();
 
 
         System.out.println("\n2 ###########################");

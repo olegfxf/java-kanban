@@ -89,7 +89,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         private T unlinkFirst(Node<T> f) {
-            // assert f == first && f != null;
             final T element = f.data;
             final Node<T> next = f.next;
             f.data = null;
@@ -130,7 +129,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         private T unlinkLast(Node<T> l) {
-            // assert l == last && l != null;
             final T element = l.data;
             final Node<T> prev = l.prev;
             l.data = null;

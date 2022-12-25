@@ -5,7 +5,7 @@ public class Epic extends Task {
     public Epic(String title, String description) {
         super(title, description);
         this.uid = Uid.getUid();
-        this.statusTask = StatusTask.NEW;
+        this.statusTask = StatusTask.DONE;
     }
 
     public Epic(Integer uid, String title, String description, String status) {
@@ -15,16 +15,13 @@ public class Epic extends Task {
         this.statusTask = StatusTask.valueOf(status);
     }
 
-
     public Integer getUid() {
         return uid;
     }
     public void setTitle(String title) {
         this.title = title;
     }
-    public StatusTask getStatusTask() {
-        return statusTask;
-    }
+
     public void setStatusTask(StatusTask statusTask) {
         this.statusTask = statusTask;
     }

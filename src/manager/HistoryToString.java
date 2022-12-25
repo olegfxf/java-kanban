@@ -2,9 +2,9 @@ package manager;
 import model.Task;
 
 public class HistoryToString {
-    static String historyToString(HistoryManager manager) {
+    public static String historyToString(HistoryManager manager) {
         String historyIds = "";
-        try { // сохраняем историю просмотров задач в строку
+        try {
             for (Task task : manager.getHistory()) {
                 historyIds += task.getUid() + ",";
             }

@@ -1,12 +1,19 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import java.util.Objects;
 
-public class Task {
+public class Task implements Comparable<Task>{
     protected Integer uid;
     protected String title;
     protected String description;
     protected StatusTask statusTask;
+
+    protected LocalDateTime startTime;
+    protected Duration duration;
+
 
     public Task() {
     }
@@ -18,14 +25,36 @@ public class Task {
         this.statusTask = StatusTask.NEW;
     }
 
-    // Конструктор для формирования задачи из данных файла
-    public Task(Integer uid, String title, String description, String status) {
+    public Task(Integer uid, String title, String description, String status, LocalDateTime startTime, Duration duration) {
         this.uid = uid;
         this.title = title;
         this.description = description;
         this.statusTask = StatusTask.valueOf(status);
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime(){
+      return startTime.plus(duration);
+    }
+
+    public void setStartTimeDuration(LocalDateTime startTime, Duration duration) {
+        this.startTime = startTime;
+        this.duration = duration;
+    }
 
     public Integer getUid() {
         return uid;
@@ -64,6 +93,22 @@ public class Task {
     }
 
     @Override
+    public int compareTo(Task task) {
+
+        LocalDateTime startTimeThis  = this.startTime;
+        LocalDateTime startTimeOther = task.getStartTime();
+        if (task == null || startTimeThis == null || startTimeOther == null) return 1;
+        if (startTimeThis.isAfter(startTimeOther)) {
+            return 1;
+        } else if (startTimeThis.isBefore(startTimeOther)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
@@ -78,7 +123,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return   uid +  ",TASK," + title + "," + statusTask.toString() + "," + description;
+        return   uid +  ",TASK," + title + ","
+                + statusTask.toString() + ","
+                + description + ","
+                + startTime + ","
+                + duration;
     }
 }
 

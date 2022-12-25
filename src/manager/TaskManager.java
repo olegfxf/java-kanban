@@ -4,9 +4,9 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
-
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -52,5 +52,11 @@ public interface TaskManager {
     void clearSubtaskEpic(Integer idEpic);
 
     void checkStatus(Integer idEpic);
+
+    Map<Integer, Subtask> getAllSubtask();
+
+    TreeSet<Task> getSortedTask();
+
+    void getPrioritizedTasks ();
 
 }

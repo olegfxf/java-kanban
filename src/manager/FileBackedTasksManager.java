@@ -7,6 +7,8 @@ import model.Task;
 import model.TaskType;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
@@ -21,56 +23,62 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void addTask(Integer uid, Task task) {
         super.addTask(uid, task);
-        save();
+        saveToFile();
     }
 
     @Override
     public void updateTask(Integer id, Task task) {
         super.updateTask(id, task);
-        save();
+        saveToFile();
     }
 
     @Override
     public void removeTaskById(Integer id) {
         super.removeTaskById(id);
-        save();
+        saveToFile();
+    }
+
+    @Override
+    public void clearTask() {
+        super.clearTask();
+        saveToFile();
     }
 
     @Override
     public void addEpic(Integer uid, Epic subTask) {
         super.addEpic(uid, subTask);
-        save();
+        saveToFile();
     }
 
     @Override
     public void updateEpic(Integer idEpic, Epic subTask) {
         super.updateEpic(idEpic, subTask);
-        save();
+        saveToFile();
     }
 
     @Override
     public void removeEpicById(Integer idEpic) {
         super.removeEpicById(idEpic);
-        save();
+        saveToFile();
     }
 
 
     @Override
     public void addSubtask(Integer uid, Subtask subtask) {
         super.addSubtask(uid, subtask);
-        save();
+        saveToFile();
     }
 
     @Override
     public void updateSubtaskById(Integer id, Subtask subtask) {
         super.updateSubtaskById(id, subtask);
-        save();
+        saveToFile();
     }
 
     @Override
     public void removeSubtaskById(Integer id) {
         super.removeSubtaskById(id);
-        save();
+        saveToFile();
     }
 
     public static List<Integer> getHistory() {
@@ -78,28 +86,35 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static void fromString(String[] split) {
+
         switch (TaskType.valueOf(split[1])) {
 
             case TASK:
-                listTask.put(Integer.valueOf(split[0]), new Task(Integer.valueOf(split[0]), split[2], split[4], split[3]));
+                listTask.put(Integer.valueOf(split[0]), new Task(Integer.valueOf(split[0]),
+                        split[2], split[4], split[3],
+                        LocalDateTime.parse(split[5]), Duration.parse(split[6])));
                 break;
 
             case EPIC:
-                listEpic.put(Integer.valueOf(split[0]), new Epic(Integer.valueOf(split[0]), split[2], split[4], split[3]));
+                listEpic.put(Integer.valueOf(split[0]), new Epic(Integer.valueOf(split[0]),
+                        split[2], split[4], split[3]));
                 break;
 
             case SUBTASK:
-                listSubtask.put(Integer.valueOf(split[0]), new Subtask(Integer.valueOf(split[0]), split[2], split[4], split[3], Integer.valueOf(split[5])));
+                listSubtask.put(Integer.valueOf(split[0]), new Subtask(Integer.valueOf(split[0]),
+                        split[2], split[4], split[3], Integer.valueOf(split[5]),
+                        split[6].equals("null") ? null : LocalDateTime.parse(split[6]),
+                        split[7].equals("null") ? null : Duration.parse(split[7])));
                 break;
         }
 
     }
 
 
-    public static void save() throws ManagerSaveException {
+    public static void saveToFile() throws ManagerSaveException {
         try (Writer fileWriter = new FileWriter("filewriter.csv")) {
 
-            String titelFiles = "id,type,name,status,description,epic";
+            String titelFiles = "id,type,name,status,description,epic, startTime, duration";
             fileWriter.write(titelFiles + "\n");
 
             for (Map.Entry<Integer, Task> taskEntry : listTask.entrySet()) {
@@ -128,21 +143,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
 
-
     public static void loadFromFile(File file) {
+        String[] taskData;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
             String readLine = "";
             br.readLine(); // читаем шапку файла
 
             while (!(readLine = br.readLine()).equals("")) {
-                String[] taskData = readLine.split(",");
+                taskData = readLine.split(",");
                 fromString(taskData);
             }
 
             readLine = br.readLine();
 
-           if(readLine != null)  history = historyFromString(readLine);
+            if (readLine != null) history = historyFromString(readLine);
 
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка выгрузки данных из файла.");
