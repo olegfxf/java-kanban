@@ -59,4 +59,8 @@ public interface TaskManager {
 
     void getPrioritizedTasks ();
 
+    void getPrioritizedTasks2 ();
+
+    void clearSortedTask();
+
 }

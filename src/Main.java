@@ -128,10 +128,6 @@ try {
         System.out.println("Список  подзадач эпика с idEpic2 :");
         System.out.println(inMemoryTaskManager.getAllSubtaskEpic(idEpic2));
 
-        System.out.println("История просмотров(idTask) в LinkedList");
-        historyManager.getHistory().stream().forEach(e -> System.out.println(e.getUid()));
-
-
         // сохраняем все данные из объектов классов FileBackedTasksManager и InMemoryHistoryManager
         FileBackedTasksManager.saveToFile();
 
@@ -168,10 +164,6 @@ try {
 
         System.out.println("Восстановленный список  подзадач эпика с idEpic2 :");
         System.out.println(inMemoryTaskManager.getAllSubtaskEpic(idEpic2));
-
-        System.out.println("Восстановленная история просмотров(idTask) в LinkedList");
-        //historyManager.getHistory().stream().forEach(e -> System.out.println(e.getUid()));
-        System.out.println(FileBackedTasksManager.getHistory());
 
         System.out.println();
         System.out.println("4.Проверьте, что история просмотра восстановилась верно и все задачи, эпики, подзадачи,"

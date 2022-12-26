@@ -9,7 +9,7 @@ import java.util.*;
 
 
 public class InMemoryTaskManager implements TaskManager {
-    protected static final Map<Integer, Task> listTask = new HashMap<>(); // заменить на privat
+    protected static final Map<Integer, Task> listTask = new HashMap<>();
     protected static final Map<Integer, Epic> listEpic = new HashMap<>();
     protected static final Map<Integer, Subtask> listSubtask = new HashMap<>();
     protected static final InMemoryHistoryManager inMemoryHistoryManager = Manager.getDefaultHistory();
@@ -25,6 +25,8 @@ public class InMemoryTaskManager implements TaskManager {
     public TreeSet<Task> getSortedTask() {
         return sortedTask;
     }
+    @Override
+    public void clearSortedTask(){ sortedTask.clear();}
 
 
     ////////////Task/////////////////////////////
@@ -331,6 +333,11 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
+    public void getPrioritizedTasks2() {
+        System.out.println();
+        sortedTask.stream().forEach(e -> System.out.println(e.toString()));
+    }
 
     @Override
     public String toString() {

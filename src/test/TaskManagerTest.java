@@ -1,4 +1,4 @@
-package Test;
+package test;
 
 import manager.Manager;
 import manager.TaskManager;
@@ -21,17 +21,25 @@ abstract class TaskManagerTest<T extends TaskManager> {
     TaskManager inMemoryTaskManager = Manager.getDefault();
     Integer max_value = Integer.MAX_VALUE;
 
-    Task task, task2, task3;
-    Integer idTask, idTask2, idTask3;
+    Task task;
+    Task task2;
+    Task task3;
+    Integer idTask;
+    Integer idTask2;
+    Integer idTask3;
 
 
-    Epic epic, epic2, epic3;
-    Integer idEpic, idEpic2, idEpic3;
+    Epic epic;
+    Epic epic2;
+    Epic epic3;
+    Integer idEpic;
+    Integer idEpic2;
+    Integer idEpic3;
 
-    Subtask subtask_1, subtask_2, subtask_3;
+    Subtask subtask1, subtask2, subtask3;
     Subtask subtask21, subtask22, subtask23;
 
-    Integer idSubtask_1, idSubtask_2, idSubtask_3;
+    Integer idSubtask1, idSubtask2, idSubtask3;
     Integer idSubtask21, idSubtask22, idSubtask23;
 
 
@@ -67,24 +75,24 @@ abstract class TaskManagerTest<T extends TaskManager> {
         inMemoryTaskManager.addEpic(idEpic3, epic3);
 
 
-        subtask_1 = new Subtask("nameSubtask_" + 1, "descriptionSubtask_" + 1);
-        idSubtask_1 = subtask_1.getUid();
-        subtask_1.setStartTimeDuration(LocalDateTime.of(2000, 4, 22, 10, 0),
+        subtask1 = new Subtask("nameSubtask_" + 1, "descriptionSubtask_" + 1);
+        idSubtask1 = subtask1.getUid();
+        subtask1.setStartTimeDuration(LocalDateTime.of(2000, 4, 22, 10, 0),
                 Duration.ofDays(2));
-        subtask_1.setIdEpic(idEpic);
-        inMemoryTaskManager.addSubtask(idSubtask_1, subtask_1);
-        subtask_2 = new Subtask("nameSubtask_" + 2, "descriptionSubtask_" + 2);
-        subtask_2.setStartTimeDuration(LocalDateTime.of(2000, 3, 22, 10, 0),
+        subtask1.setIdEpic(idEpic);
+        inMemoryTaskManager.addSubtask(idSubtask1, subtask1);
+        subtask2 = new Subtask("nameSubtask_" + 2, "descriptionSubtask_" + 2);
+        subtask2.setStartTimeDuration(LocalDateTime.of(2000, 3, 22, 10, 0),
                 Duration.ofDays(2));
-        idSubtask_2 = subtask_2.getUid();
-        subtask_2.setIdEpic(idEpic);
-        inMemoryTaskManager.addSubtask(idSubtask_2, subtask_2);
-        subtask_3 = new Subtask("nameSubtask_" + 3, "descriptionSubtask_" + 3);
-        subtask_3.setStartTimeDuration(LocalDateTime.of(2000, 2, 22, 10, 0),
+        idSubtask2 = subtask2.getUid();
+        subtask2.setIdEpic(idEpic);
+        inMemoryTaskManager.addSubtask(idSubtask2, subtask2);
+        subtask3 = new Subtask("nameSubtask_" + 3, "descriptionSubtask_" + 3);
+        subtask3.setStartTimeDuration(LocalDateTime.of(2000, 2, 22, 10, 0),
                 Duration.ofDays(2));
-        idSubtask_3 = subtask_3.getUid();
-        subtask_3.setIdEpic(idEpic);
-        inMemoryTaskManager.addSubtask(idSubtask_3, subtask_3);
+        idSubtask3 = subtask3.getUid();
+        subtask3.setIdEpic(idEpic);
+        inMemoryTaskManager.addSubtask(idSubtask3, subtask3);
 
         subtask21 = new Subtask("nameSubtask" + 21, "descriptionSubtask" + 21);
         idSubtask21 = subtask21.getUid();
@@ -118,13 +126,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
         inMemoryTaskManager.getEpicById(idEpic2);
         inMemoryTaskManager.getEpicById(idEpic3);
 
-        inMemoryTaskManager.getSubtaskById(idSubtask_3);
-        inMemoryTaskManager.getSubtaskById(idSubtask_1);
-        inMemoryTaskManager.getSubtaskById(idSubtask_2);
+        inMemoryTaskManager.getSubtaskById(idSubtask3);
+        inMemoryTaskManager.getSubtaskById(idSubtask1);
+        inMemoryTaskManager.getSubtaskById(idSubtask2);
 
     }
+
     @AfterEach
-    public void AfterEach(){
+    public void AfterEach() {
         inMemoryTaskManager.clearTask();
         inMemoryTaskManager.clearEpic();
     }
@@ -325,9 +334,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask43.setIdEpic(idEpic4);
         inMemoryTaskManager.addSubtask(idSubtask43, subtask43);
 
-        Integer beginNumSubtask =  inMemoryTaskManager.getAllSubtask().size();
+        Integer beginNumSubtask = inMemoryTaskManager.getAllSubtask().size();
         inMemoryTaskManager.addEpic(idEpic4, epic4);
-        Integer finishNumSubtask =  inMemoryTaskManager.getAllSubtask().size();
+        Integer finishNumSubtask = inMemoryTaskManager.getAllSubtask().size();
         assertEquals(beginNumSubtask, finishNumSubtask, "Эпик добавлен." +
                 " Количество подзадач не должно увеличиться на "
                 + (finishNumSubtask - beginNumSubtask));
@@ -468,14 +477,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         // a. Со стандартным поведением.
         // метод addSubtask() уже активирован в beforeEach()
-        Subtask savedSubtask = inMemoryTaskManager.getSubtaskById(idSubtask_1);
+        Subtask savedSubtask = inMemoryTaskManager.getSubtaskById(idSubtask1);
         assertNotNull(savedSubtask, "Подзадача не найдена.");
-        assertEquals(subtask_1, savedSubtask, "Подзадачи не совпадают");
+        assertEquals(subtask1, savedSubtask, "Подзадачи не совпадают");
 
         Map<Integer, Subtask> subtasks = inMemoryTaskManager.getAllSubtask();
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(6, subtasks.size(), "Неверное количество подзадач.");
-        assertEquals(subtask_1, subtasks.get(idSubtask_1), "Подзадачи не совпадают.");
+        assertEquals(subtask1, subtasks.get(idSubtask1), "Подзадачи не совпадают.");
 
         //c. С неверным идентификатором подзадачи (пустой и/или несуществующий идентификатор).
         // запрашиваем подзадачу с неверным идентификатором max_value
@@ -486,7 +495,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         // b. С пустым списком подзадач.
         inMemoryTaskManager.clearSubtaskEpic(idEpic);
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> inMemoryTaskManager.getSubtaskById(idSubtask_1));
+                () -> inMemoryTaskManager.getSubtaskById(idSubtask1));
         System.out.printf("\nТестирование addTask() с пустым списком: " + exception.getMessage());
 
     }
@@ -494,14 +503,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void getSubtaskById() {
         // a. Со стандартным поведением.
-        Subtask requestSubtask = inMemoryTaskManager.getSubtaskById(idSubtask_1);
+        Subtask requestSubtask = inMemoryTaskManager.getSubtaskById(idSubtask1);
         assertNotNull(requestSubtask, "Подзадача не найдена.");
-        assertEquals(subtask_1, requestSubtask, "Ползадачи не совпадают");
+        assertEquals(subtask1, requestSubtask, "Ползадачи не совпадают");
 
         Map<Integer, Subtask> subtasks = inMemoryTaskManager.getAllSubtask();
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(6, subtasks.size(), "Неверное количество подзадач.");
-        assertEquals(subtask_1, subtasks.get(idSubtask_1), "Подзадачи не совпадают.");
+        assertEquals(subtask1, subtasks.get(idSubtask1), "Подзадачи не совпадают.");
 
         //c. С неверным идентификатором задачи (пустой и/или несуществующий идентификатор).
         // запрашиваем подзадачу с неверным идентификатором max_value
@@ -512,7 +521,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         // b. С пустым списком подзадач.
         inMemoryTaskManager.clearSubtaskEpic(idEpic);
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> inMemoryTaskManager.getSubtaskById(idSubtask_1));
+                () -> inMemoryTaskManager.getSubtaskById(idSubtask1));
         System.out.printf("\nТестирование getSubtaskById() с пустым списком: " + exception.getMessage());
 
     }
@@ -520,11 +529,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void updateSubtaskById() {
         // a. Со стандартным поведением.
-        Subtask subtask = inMemoryTaskManager.getSubtaskById(idSubtask_1);
+        Subtask subtask = inMemoryTaskManager.getSubtaskById(idSubtask1);
         subtask.setTitle("testName");
-        inMemoryTaskManager.updateSubtaskById(idSubtask_1, subtask);
+        inMemoryTaskManager.updateSubtaskById(idSubtask1, subtask);
 
-        Subtask updatedSubtask = inMemoryTaskManager.getSubtaskById(idSubtask_1);
+        Subtask updatedSubtask = inMemoryTaskManager.getSubtaskById(idSubtask1);
         assertNotNull(updatedSubtask, "Подзадача не найдена.");
         assertEquals("testName", updatedSubtask.getTitle(), "Наименования " +
                 "подзадач не совпадают");
@@ -532,11 +541,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Map<Integer, Subtask> subtasks = inMemoryTaskManager.getAllSubtask();
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(6, subtasks.size(), "Неверное количество подзадач.");
-        assertEquals(updatedSubtask, subtasks.get(idSubtask_1), "Подзадачи не совпадают.");
+        assertEquals(updatedSubtask, subtasks.get(idSubtask1), "Подзадачи не совпадают.");
 
         //c. С неверным идентификатором подзадачи (пустой и/или несуществующий идентификатор).
-        subtask_2.setTitle("updatedTitle");
-        Subtask updatedSubtask2 = subtask_2;
+        subtask2.setTitle("updatedTitle");
+        Subtask updatedSubtask2 = subtask2;
         // обновляем подзадачу с неверным идентификатором max_value
         Exception exception2 = assertThrows(IllegalArgumentException.class,
                 () -> inMemoryTaskManager.updateSubtaskById(max_value, updatedSubtask2));
@@ -546,7 +555,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         // b. С пустым списком подзадач.
         inMemoryTaskManager.clearSubtaskEpic(idEpic);
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> inMemoryTaskManager.updateSubtaskById(idSubtask_2, updatedSubtask2));
+                () -> inMemoryTaskManager.updateSubtaskById(idSubtask2, updatedSubtask2));
         System.out.printf("\nТестирование updateSubtaskById() с пустым списком: "
                 + exception.getMessage());
 
@@ -555,9 +564,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void removeSubtaskById() {
         // a. Со стандартным поведением.
-        inMemoryTaskManager.removeSubtaskById(idSubtask_1);
+        inMemoryTaskManager.removeSubtaskById(idSubtask1);
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> inMemoryTaskManager.getSubtaskById(idSubtask_1));
+                () -> inMemoryTaskManager.getSubtaskById(idSubtask1));
         System.out.printf("\nТестирование removeSubtaskById() cо стандартным поведением."
                 + " Подзадача не найдена: " + exception.getMessage());
 
@@ -576,7 +585,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         // b. С пустым списком подзадач.
         inMemoryTaskManager.clearSubtaskEpic(idEpic);
         Exception exception3 = assertThrows(IllegalArgumentException.class,
-                () -> inMemoryTaskManager.removeSubtaskById(idSubtask_1));
+                () -> inMemoryTaskManager.removeSubtaskById(idSubtask1));
         System.out.printf("\nТестирование removeTaskById() с пустым списком: " + exception3.getMessage());
 
     }
@@ -601,6 +610,26 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void checkTaskSequence() {
+        inMemoryTaskManager.clearTask();
+        inMemoryTaskManager.clearSortedTask();
+
+        task = new Task("nameTask" + 1, "descriptionTask" + 1);
+        idTask = task.getUid();
+        task.setStartTimeDuration(LocalDateTime.of(2022, 2, 2, 10, 0),
+                Duration.ofDays(2));
+        inMemoryTaskManager.addTask(idTask, task);
+        task2 = new Task("nameTask" + 2, "descriptionTask" + 2);
+        idTask2 = task2.getUid();
+        task2.setStartTimeDuration(LocalDateTime.of(2022, 5, 2, 20, 0),
+                Duration.ofDays(5));
+        inMemoryTaskManager.addTask(idTask2, task2);
+        task3 = new Task("nameTask" + 3, "descriptionTask" + 3);
+        idTask3 = task3.getUid();
+        task3.setStartTimeDuration(LocalDateTime.of(2022, 3, 2, 12, 0),
+                Duration.ofDays(20));
+        inMemoryTaskManager.addTask(idTask3, task3);
+
+        inMemoryTaskManager.getPrioritizedTasks2();
         inMemoryTaskManager.getPrioritizedTasks();
     }
 

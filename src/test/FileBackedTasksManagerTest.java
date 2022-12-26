@@ -1,4 +1,4 @@
-package Test;
+package test;
 
 import manager.FileBackedTasksManager;
 import manager.InMemoryHistoryManager;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,102 +18,42 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
-
     InMemoryHistoryManager historyManager = Manager.getDefaultHistory();
+    File file = new File("filewriter.csv");
+
+
 
     @Test
-    void addTask() {
-        super.addTask();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
+    public void saveAndLoadFromFile(){
 
-    @Test
-    void updateTask() {
-        super.updateTask();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
+        System.out.println("\nСохраненные");
+        Map<Integer, Task> taskList = inMemoryTaskManager.getAllTask();
+        System.out.println(taskList);
+        Map<Integer, Epic> epicList = inMemoryTaskManager.getAllEpic();
+        System.out.println(epicList);
+        Map<Integer, Subtask> subtaskList = inMemoryTaskManager.getAllSubtask();
+        System.out.println(subtaskList);
 
-    @Test
-    void removeTaskById() {
-        super.removeTaskById();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
-    @Test
-    public void clearTask() {
-        super.clearTask();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
+        FileBackedTasksManager.saveToFile();       // сохранил все списки в файле
+        FileBackedTasksManager.loadFromFile(file); // восстановил из файла сохраненные списки
 
+        System.out.println("\nВосстановленные");
+        Map<Integer, Task> savedTaskList = inMemoryTaskManager.getAllTask();
+        System.out.println(taskList);
+        Map<Integer, Epic> savedEpicList = inMemoryTaskManager.getAllEpic();
+        System.out.println(epicList);
+        Map<Integer, Subtask> savedSubtaskList = inMemoryTaskManager.getAllSubtask();
+        System.out.println(subtaskList);
 
-    /////////////// epic testing /////////////////////////////
-    // Для подзадач нужно дополнительно проверить наличие эпика,
-    // а для эпика — расчёт статуса.
-
-    @Test
-    void addEpic() {
-        super.addEpic();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
-
-    @Test
-    void updateEpic() {
-        super.updateEpic();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
-
-    @Test
-    void removeEpicById() {
-        super.removeEpicById();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
-
-    @Test
-    void addSubtask() {
-        super.addSubtask();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
+        assertArrayEquals(taskList.values().toArray(),
+                savedTaskList.values().toArray(), "Массивы не равны!");
+        assertArrayEquals(epicList.values().toArray(),
+                savedEpicList.values().toArray(), "Массивы не равны!");
+        assertArrayEquals(subtaskList.values().toArray(),
+                savedSubtaskList.values().toArray(), "Массивы не равны!");
 
     }
 
-    @Test
-    void updateSubtaskById() {
-        super.updateSubtaskById();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
-
-    @Test
-    void removeSubtaskById() {
-        super.removeSubtaskById();
-        (new File ("filewriter.csv")).delete();
-        FileBackedTasksManager.saveToFile();
-        assertTrue(Files.exists(Paths.get("filewriter.csv")),
-                "Данные в файл не сохранены");
-    }
 
 
 
@@ -124,7 +65,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         historyManager.getHistory().stream().forEach(e -> history.add(e.getUid()));
 
         FileBackedTasksManager.saveToFile();
-        FileBackedTasksManager.loadFromFile(new File("filewriter.csv"));
+        FileBackedTasksManager.loadFromFile(file);
 
         List<Integer> savedHistory = FileBackedTasksManager.getHistory();
 
@@ -135,7 +76,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     public void saveAndLoadFromFileEmptyTaskList() {
 
-        // a. Пустой список задач.
+        // корректируются данные из beforeEach() для тестирования пункта ТЗ 7 "a. Пустой список задач."
         inMemoryTaskManager.clearTask();
         inMemoryTaskManager.clearEpic();
 
@@ -144,7 +85,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         Map<Integer, Subtask> subtaskList = inMemoryTaskManager.getAllSubtask();
 
         FileBackedTasksManager.saveToFile();
-        FileBackedTasksManager.loadFromFile(new File("filewriter.csv"));
+        FileBackedTasksManager.loadFromFile(file);
 
         Map<Integer, Task> savedTaskList = inMemoryTaskManager.getAllTask();
         Map<Integer, Epic> savedEpicList = inMemoryTaskManager.getAllEpic();
@@ -161,7 +102,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     void saveAndLoadFromFileEpicListWithoutSubtasks() {
-        // b. Эпик без подзадач.
+        // корректируются данные из beforeEach() для тестирования пункта ТЗ 7 "b. Эпик без подзадач."
         inMemoryTaskManager.clearTask();
         inMemoryTaskManager.clearSubtaskEpic(idEpic);
         inMemoryTaskManager.removeEpicById(idEpic2);
@@ -173,7 +114,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         Map<Integer, Subtask> subtaskList = inMemoryTaskManager.getAllSubtask();
 
         FileBackedTasksManager.saveToFile();
-        FileBackedTasksManager.loadFromFile(new File("filewriter.csv"));
+        FileBackedTasksManager.loadFromFile(file);
 
         Map<Integer, Task> savedTaskList = inMemoryTaskManager.getAllTask();
         Map<Integer, Epic> savedEpicList = inMemoryTaskManager.getAllEpic();
@@ -190,13 +131,13 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     void saveAndLoadFromFileEmptyHistoryList() {
-
+        // корректируются данные из beforeEach() для тестирования пункта ТЗ 7  "c. Пустой список истории."
         inMemoryTaskManager.clearTask();
         inMemoryTaskManager.clearEpic();
         historyManager.clearAll();
 
         FileBackedTasksManager.saveToFile();
-        FileBackedTasksManager.loadFromFile(new File("filewriter.csv"));
+        FileBackedTasksManager.loadFromFile(file);
 
         List<Integer> savedHistory = FileBackedTasksManager.getHistory();
 
