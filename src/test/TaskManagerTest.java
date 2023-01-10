@@ -1,14 +1,14 @@
 package test;
 
+import server.KVServer;
 import manager.Manager;
 import manager.TaskManager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -17,6 +17,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 abstract class TaskManagerTest<T extends TaskManager> {
+    static KVServer kvServer;
     Task savedTask;
     TaskManager inMemoryTaskManager = Manager.getDefault();
     Integer max_value = Integer.MAX_VALUE;
@@ -42,6 +43,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     Integer idSubtask1, idSubtask2, idSubtask3;
     Integer idSubtask21, idSubtask22, idSubtask23;
 
+    @BeforeAll
+    static void beforeAll() throws IOException {
+        kvServer = new KVServer();
+        kvServer.start();
+    }
 
     @BeforeEach
     public void beforeEach() {
@@ -137,6 +143,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         inMemoryTaskManager.clearTask();
         inMemoryTaskManager.clearEpic();
     }
+
+    @AfterAll
+    static void afterAll(){ kvServer.stop(); }
 
 
     @Test

@@ -1,17 +1,20 @@
 package test;
 
+import server.KVServer;
 import manager.Manager;
 import manager.TaskManager;
 import model.Epic;
 import model.StatusTask;
 import model.Subtask;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
+import java.io.IOException;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
+    static KVServer kvServer;
+
     TaskManager inMemoryTaskManager = Manager.getDefault();
     Epic epic;
     Integer idEpic1;
@@ -20,6 +23,11 @@ class EpicTest {
     Integer idSubtask2;
     Integer idSubtask3;
 
+    @BeforeAll
+    static void beforeAll() throws IOException {
+        kvServer = new KVServer();
+        kvServer.start();
+    }
 
     @BeforeEach
     public void beforeEach() {
@@ -55,6 +63,11 @@ class EpicTest {
     @AfterEach
     public void afterEach() {
         inMemoryTaskManager.clearEpic();
+    }
+
+    @AfterAll
+    static void afterAll(){
+        kvServer.stop();
     }
 
 

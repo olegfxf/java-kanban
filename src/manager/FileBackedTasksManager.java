@@ -18,7 +18,7 @@ import static manager.HistoryToString.historyToString;
 
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    private static List<Integer> history = new ArrayList<>();
+    protected static List<Integer> history = new ArrayList<>();
 
     @Override
     public void addTask(Integer uid, Task task) {
@@ -111,7 +111,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
 
-    public static void saveToFile() throws ManagerSaveException {
+    public void saveToFile() throws ManagerSaveException {
         try (Writer fileWriter = new FileWriter("filewriter.csv")) {
 
             String titelFiles = "id,type,name,status,description,epic, startTime, duration";
@@ -143,7 +143,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
 
-    public static void loadFromFile(File file) {
+    public void loadFromFile(File file) {
         String[] taskData;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 

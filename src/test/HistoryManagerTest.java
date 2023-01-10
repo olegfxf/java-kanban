@@ -1,16 +1,13 @@
 package test;
 
-import manager.HistoryToString;
-import manager.InMemoryHistoryManager;
-import manager.Manager;
-import manager.TaskManager;
+import manager.*;
 import model.Epic;
 
 import model.Task;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import server.KVServer;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HistoryManagerTest {
+    static KVServer kvServer;
 
     TaskManager inMemoryTaskManager = Manager.getDefault();
     InMemoryHistoryManager historyManager = Manager.getDefaultHistory();
@@ -27,6 +25,12 @@ class HistoryManagerTest {
 
     Epic epic, epic2, epic3;
     Integer idEpic, idEpic2, idEpic3;
+
+    @BeforeAll
+    static void beforeAll() throws IOException {
+        kvServer = new KVServer();
+        kvServer.start();
+    }
 
     @BeforeEach
     public void beforeEach() {
@@ -79,6 +83,11 @@ class HistoryManagerTest {
         inMemoryTaskManager.clearTask();
         inMemoryTaskManager.clearEpic();
         historyManager.clearAll();
+    }
+
+    @AfterAll
+    static void afterAll(){
+        kvServer.stop();
     }
 
     @Test

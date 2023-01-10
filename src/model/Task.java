@@ -60,6 +60,10 @@ public class Task implements Comparable<Task>{
         return uid;
     }
 
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
     public void startTask() {
         statusTask = StatusTask.IN_PROGRESS;
     }

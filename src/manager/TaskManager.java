@@ -62,5 +62,6 @@ public interface TaskManager {
     void getPrioritizedTasks2 ();
 
     void clearSortedTask();
+    void clearSubtask();
 
 }

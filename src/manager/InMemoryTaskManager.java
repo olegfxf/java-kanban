@@ -288,6 +288,14 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public void clearSubtask(){
+        for (Integer idSubtask : listSubtask.keySet()){
+            inMemoryHistoryManager.remove(idSubtask);
+            sortedTask.remove(getSubtaskById(idSubtask));
+        }
+        listSubtask.clear();
+    }
+
     @Override
     public void checkStatus(Integer idEpic) {
         int statusNEW = 0;
