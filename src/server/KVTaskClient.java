@@ -32,9 +32,9 @@ public class KVTaskClient {
         return Long.parseLong(responseKey.body());
     }
 
-    public void save(String requestBody)  {
+    public void save(String key, String requestBody)  {
         Long apiToken = register();
-        URI save = URI.create("http://localhost:8078/save/mykey?API_TOKEN=" + apiToken);
+        URI save = URI.create("http://localhost:8078/save/" + key + "?API_TOKEN=" + apiToken);
 
         HttpRequest requestSave = HttpRequest.newBuilder()
                 .uri(save)
@@ -52,9 +52,9 @@ public class KVTaskClient {
         }
     }
 
-    public String load()  {
+    public String load(String key)  {
         Long apiToken = register();
-        URI load = URI.create("http://localhost:8078/load/mykey?API_TOKEN=" + apiToken);
+        URI load = URI.create("http://localhost:8078/load/" + key + "?API_TOKEN=" + apiToken);
         
         HttpRequest requestLoad = HttpRequest.newBuilder()
                 .uri(load)

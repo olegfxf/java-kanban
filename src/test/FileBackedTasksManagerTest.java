@@ -34,8 +34,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         Map<Integer, Subtask> subtaskList = inMemoryTaskManager.getAllSubtask();
         System.out.println(subtaskList);
 
-        fileBackedTasksManager.saveToFile();       // сохранил все списки в файле
-        fileBackedTasksManager.loadFromFile(file); // восстановил из файла сохраненные списки
+        fileBackedTasksManager.saveObjects();       // сохранил все списки в файле
+        fileBackedTasksManager.loadObjects(file); // восстановил из файла сохраненные списки
 
         System.out.println("\nВосстановленные");
         Map<Integer, Task> savedTaskList = inMemoryTaskManager.getAllTask();
@@ -64,8 +64,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         List<Integer> history = new ArrayList<>();
         historyManager.getHistory().stream().forEach(e -> history.add(e.getUid()));
 
-        fileBackedTasksManager.saveToFile();
-        fileBackedTasksManager.loadFromFile(file);
+        fileBackedTasksManager.saveObjects();
+        fileBackedTasksManager.loadObjects(file);
 
         List<Integer> savedHistory = FileBackedTasksManager.getHistory();
 
@@ -84,8 +84,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         Map<Integer, Epic> epicList = inMemoryTaskManager.getAllEpic();
         Map<Integer, Subtask> subtaskList = inMemoryTaskManager.getAllSubtask();
 
-        fileBackedTasksManager.saveToFile();
-        fileBackedTasksManager.loadFromFile(file);
+        fileBackedTasksManager.saveObjects();
+        fileBackedTasksManager.loadObjects(file);
 
         Map<Integer, Task> savedTaskList = inMemoryTaskManager.getAllTask();
         Map<Integer, Epic> savedEpicList = inMemoryTaskManager.getAllEpic();
@@ -113,8 +113,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         Map<Integer, Epic> epicList = inMemoryTaskManager.getAllEpic();
         Map<Integer, Subtask> subtaskList = inMemoryTaskManager.getAllSubtask();
 
-        fileBackedTasksManager.saveToFile();
-        fileBackedTasksManager.loadFromFile(file);
+        fileBackedTasksManager.saveObjects();
+        fileBackedTasksManager.loadObjects(file);
 
         Map<Integer, Task> savedTaskList = inMemoryTaskManager.getAllTask();
         Map<Integer, Epic> savedEpicList = inMemoryTaskManager.getAllEpic();
@@ -136,8 +136,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         inMemoryTaskManager.clearEpic();
         historyManager.clearAll();
 
-        fileBackedTasksManager.saveToFile();
-        fileBackedTasksManager.loadFromFile(file);
+        fileBackedTasksManager.saveObjects();
+        fileBackedTasksManager.loadObjects(file);
 
         List<Integer> savedHistory = FileBackedTasksManager.getHistory();
 

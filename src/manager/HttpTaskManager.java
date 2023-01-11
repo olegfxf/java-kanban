@@ -13,11 +13,14 @@ import static manager.HistoryFromString.historyFromString;
 import static manager.HistoryToString.historyToString;
 
 public class HttpTaskManager extends FileBackedTasksManager {
+    final String saveKey = "keyForStorage";
     public KVTaskClient kvTaskClient = new KVTaskClient();
 
-
+    // Наименование метода изменил. В методе сохраняются сразу все объекты
+    // приложения - задачи, эпики, субзадачи и история согласно рекомендациям ТЗ 6.
+    // Поэтому параметры в методе отсутствуют.
     @Override
-    public void saveToFile() throws ManagerSaveException {
+    public void saveObjects() throws ManagerSaveException {
         String request = "";
 
         String titleField = "id,type,name,status,description,epic, startTime, duration";
@@ -42,12 +45,15 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
         request += historyToString(inMemoryHistoryManager);
         // сохраняем историю просмотров
-        kvTaskClient.save(request);
+        kvTaskClient.save(saveKey, request);
     }
 
+    // Наименование метода изменил. В методе загружаются сразу все объекты
+    // приложения - задачи, эпики, субзадачи и история согласно рекомендациям ТЗ 6.
+    // Поэтому параметры в методе отсутствуют.
     @Override
-    public void loadFromFile(File file) {
-        String response = kvTaskClient.load();
+    public void loadObjects(File file) {
+        String response = kvTaskClient.load(saveKey);
 
         String[] taskData;
         try (BufferedReader br = new BufferedReader(new StringReader(response))) {

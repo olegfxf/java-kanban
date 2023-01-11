@@ -23,62 +23,62 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void addTask(Integer uid, Task task) {
         super.addTask(uid, task);
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void updateTask(Integer id, Task task) {
         super.updateTask(id, task);
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void removeTaskById(Integer id) {
         super.removeTaskById(id);
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void clearTask() {
         super.clearTask();
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void addEpic(Integer uid, Epic subTask) {
         super.addEpic(uid, subTask);
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void updateEpic(Integer idEpic, Epic subTask) {
         super.updateEpic(idEpic, subTask);
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void removeEpicById(Integer idEpic) {
         super.removeEpicById(idEpic);
-        saveToFile();
+        saveObjects();
     }
 
 
     @Override
     public void addSubtask(Integer uid, Subtask subtask) {
         super.addSubtask(uid, subtask);
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void updateSubtaskById(Integer id, Subtask subtask) {
         super.updateSubtaskById(id, subtask);
-        saveToFile();
+        saveObjects();
     }
 
     @Override
     public void removeSubtaskById(Integer id) {
         super.removeSubtaskById(id);
-        saveToFile();
+        saveObjects();
     }
 
     public static List<Integer> getHistory() {
@@ -111,7 +111,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
 
-    public void saveToFile() throws ManagerSaveException {
+    public void saveObjects() throws ManagerSaveException {
         try (Writer fileWriter = new FileWriter("filewriter.csv")) {
 
             String titelFiles = "id,type,name,status,description,epic, startTime, duration";
@@ -143,7 +143,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
 
-    public void loadFromFile(File file) {
+    public void loadObjects(File file) {
         String[] taskData;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
