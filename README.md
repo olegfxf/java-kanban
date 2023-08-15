@@ -1,5 +1,6 @@
 # java-kanban
 Repository for homework project.
 
-Использовались : java SE, HTTP, Apache Tomcat.
+Менеджер задач. Я написал приложение, которое умеет сохранять разные задачи и хранить их в файле и в последующем появилась возможность хранить их на сервере.
+Использовались : java SE, HTTP,  Apache Tomcat.
 
